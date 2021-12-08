@@ -10,27 +10,36 @@ import random
 # =============================================================================
 
 class Dealer:
-    pass
+    def __init__(self):
+        pass
 
 
 class Player:
-    pass
+    def __init__(self):
+        self.name = input("Please enter your name: ")
 
 
 class Deck:
-    pass
+    def __init__(self):
+        pass
 
 
 class Card:
-    pass
+    def __init__(self):
+        self.name = None
+        self.value = None
 
 
 class GameRound:
-    pass
+    def __init__(self):
+        pass
 
 
 class Game:
-    pass
+    def __init__(self):
+        self.end_game = False
+        self.player = Player()
+        self.dealer = Dealer()
 
 
 # =============================================================================
