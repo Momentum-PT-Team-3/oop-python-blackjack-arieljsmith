@@ -8,9 +8,9 @@
 
 
 # The dealer's play is dictated by the rules of the game, and the dealer goes first. The dealer "hits" (is dealt a card) until their hand total is 17 or greater, at which point they stay. The dealers cards are all visible to the player.
-# The player then chooses whether to be hit or stay. The player may hit as many times as they want before staying, but if their hand totals over 21, they "bust" and lose. 
+# The player then chooses whether to be hit or stay. The player may hit as many times as they want before staying, but if their hand totals over 21, they "bust" and lose.
 # If you want to make the game work for multiple players, go for it.
-# The deck is a standard 52 card deck with 4 suits. Face cards are worth 10. The Ace card can be worth 1 or 11.  
+# The deck is a standard 52 card deck with 4 suits. Face cards are worth 10. The Ace card can be worth 1 or 11. 
 # Use classes. One way to think about classes is that they are the _nouns_ involved in what you are modeling, so Card, Deck, Player, Dealer, and Game are all nouns that could be classes.
 # Give those classes methods. Think about the _actions_ that happen to or are caused by these different elements. These choices are subjective and hard, and there is no one right way.
 # Use your classes and methods to execute the gameplay. It is always a great idea to sketch and/or comment this out first before writing code.
@@ -43,6 +43,14 @@ class Dealer:
     def __str__(self):
         return "Dealer"
 
+    def deal(self, popped_cards):
+        for card in popped_cards:
+            self.hand.append(card)
+        print(f"DEALER'S HAND: ", [f"{card}" for card in self.hand])
+
+    def reset_dealer_hand(self):
+        self.hand = []
+
 
 class Player:
     def __init__(self):
@@ -52,10 +60,41 @@ class Player:
     def __str__(self):
         return self.name
 
+    def deal(self, popped_cards):
+        for card in popped_cards:
+            self.hand.append(card)
+        print(f"YOUR HAND: ", [f"{card}" for card in self.hand])
+    
+    def reset_player_hand(self):
+        self.hand = []
+
 
 class Deck:
     def __init__(self):
-        pass
+        self.deck = self.build(["diamonds", "spades", "clubs", "hearts"], [2, 3, 4, 5, 6, 7, 8, 9, 10, "Jack", "Queen", "King", "Ace"])
+
+    def __str__(self):
+        return str(self.deck)
+
+    def build(self, suits, ranks):
+        deck = []
+        for suit in suits:
+            for rank in ranks:
+                card = Card(suit, rank)
+                deck.append(card)
+        random.shuffle(deck)
+        return deck
+
+    def deal(self, dealer, player):
+        dealer_tuple = (self.deck.pop(), self.deck.pop())
+        player_tuple = (self.deck.pop(), self.deck.pop())
+        dealer.deal(dealer_tuple)
+        player.deal(player_tuple)
+        self.show_cards()
+
+    def show_cards(self):
+        print(f"The cards in this deck include: ", [f"{card}" for card in self.deck])
+
 
 
 class Card:
@@ -63,10 +102,18 @@ class Card:
         self.suit = suit
         self.rank = rank
 
+    def __str__(self):
+        return f"{self.rank} of {self.suit}"
+
 
 class GameRound:
-    def __init__(self):
-        pass
+    def __init__(self, player, dealer):
+        self.deck = Deck()
+        # Deal first two cards to dealer hand, second two cards to player hand
+            # This involves removing each card from the deck before placing it in the respective hand
+        # Print contents of dealer hand
+        # Print contents of player hand
+        self.deck.deal(dealer, player)
 
 
 class Game:
@@ -77,13 +124,15 @@ class Game:
 
     def start(self):
         while not self.end_game:
-            # Start a gameround on this line
+            GameRound(self.player, self.dealer)
             self.check_end_condition()
 
     def check_end_condition(self):
         answer = input("Would you like to play another round? y/n: ")
         if answer == "y":
-            # Start another gameround on this line
+            self.player.reset_player_hand()
+            self.dealer.reset_dealer_hand()
+            GameRound(self.player, self.dealer)
             self.check_end_condition()
         else:
             print("Thank you for playing!")
@@ -94,21 +143,25 @@ class Game:
 # W H E R E  S H I R T  H A P P E N S
 # =============================================================================
 
-# Game Play/testing shirt works (Mostly the letter)
-player = Player()
-dealer = Dealer()
-print(player, dealer)
+# Game Play/testing shirt works (Mostly the latter)
+# player = Player()
+# dealer = Dealer()
+# print(f"{player} is playing against the {dealer}.")
+# print ()
+# deck = Deck()
+# deck.show_cards()
 
-suits = ["◆", "♠", "♣", "♥"]
-ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]
+# suits = ["diamonds", "spades", "clubs", "hearts"]
+# ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]
 
-deck = []
-for suit in suits:
-    for rank in ranks:
-        card = Card(suit, rank)
-        deck.append(card)
+# deck = []
+# for suit in suits:
+#     for rank in ranks:
+#         card = Card(suit, rank)
+#         deck.append(card)
 
-# game = Game()
+game = Game()
+game.start()
 
 # =============================================================================
 # M I S C E L L A N Y
