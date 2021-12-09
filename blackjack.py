@@ -138,22 +138,35 @@ class Card:
 class GameRound:
     def __init__(self, player, dealer):
         self.deck = Deck()
+        self.dealer_score = 0
+        self.player_score = 0
         # Deal first two cards to dealer hand, second two cards to player hand
             # This involves removing each card from the deck before placing it in the respective hand
         # Print contents of dealer hand
         # Print contents of player hand
         self.deck.deal(dealer, player)
-        # insert call to hand value tally function here...the GameRound will tally it.
+        self.total_hand_values(dealer, player, self.dealer_score, self.player_score)
         self.prompt_hit_or_stand()
         # function to check if player's hand is at 21. If it is, they win!
         # if it ISN'T, then we go into dealer actions.
 
+    def total_hand_values(self, dealer, player, dealer_score, player_score):
+        for card in player.hand:
+            player_score += card.value
+        for card in dealer.hand:
+            dealer_score += card.value
+        print(f"DEALER SCORE: {dealer_score}")
+        print(f"PLAYER SCORE: {player_score}")
+
     def prompt_hit_or_stand(self):
         # While summed value of player's hand is less than 21...
             player_choice = input("Hit or stand? ")
-            if (player_choice.lower() != "hit") or (player_choice.lower() != "stand"):
+            if (player_choice.lower() != "hit") and (player_choice.lower() != "stand"):
                 print("Invalid input. Please only enter 'hit' or 'stand'.")
-
+            elif player_choice.lower() == "hit":
+                pass
+            else:
+                pass
 
 
 class Game:
