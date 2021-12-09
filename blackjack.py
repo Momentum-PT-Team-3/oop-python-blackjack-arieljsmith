@@ -140,21 +140,24 @@ class GameRound:
         self.deck = Deck()
         self.dealer_score = 0
         self.player_score = 0
-        # Deal first two cards to dealer hand, second two cards to player hand
-            # This involves removing each card from the deck before placing it in the respective hand
-        # Print contents of dealer hand
-        # Print contents of player hand
+
         self.deck.deal(dealer, player)
-        self.total_hand_values(dealer, player, self.dealer_score, self.player_score)
+        self.total_initial_hand_values(dealer, player, self.dealer_score, self.player_score)
         self.prompt_hit_or_stand()
         # function to check if player's hand is at 21. If it is, they win!
         # if it ISN'T, then we go into dealer actions.
 
-    def total_hand_values(self, dealer, player, dealer_score, player_score):
+    def total_initial_hand_values(self, dealer, player, dealer_score, player_score):
         for card in player.hand:
             player_score += card.value
         for card in dealer.hand:
             dealer_score += card.value
+        print(f"DEALER SCORE: {dealer_score}")
+        print(f"PLAYER SCORE: {player_score}")
+
+    def total_subsequent_hand_values(self, dealer, player, dealer_score, player_score):
+        dealer_score += dealer.hand[-1].value
+        player_score += player.hand[-1].value
         print(f"DEALER SCORE: {dealer_score}")
         print(f"PLAYER SCORE: {player_score}")
 
