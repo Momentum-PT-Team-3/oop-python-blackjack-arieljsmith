@@ -64,7 +64,7 @@ class Player:
         for card in popped_cards:
             self.hand.append(card)
         print(f"YOUR HAND: ", [f"{card}" for card in self.hand])
-    
+
     def reset_player_hand(self):
         self.hand = []
 
@@ -101,9 +101,31 @@ class Card:
     def __init__(self, suit, rank):
         self.suit = suit
         self.rank = rank
+        self.value = self.calculate_value(self.rank)
 
     def __str__(self):
         return f"{self.rank} of {self.suit}"
+
+    def calculate_value(self, rank):
+        value_dictionary = {
+            2: 2,
+            3: 3,
+            4: 4,
+            5: 5,
+            6: 6,
+            7: 7,
+            8: 8,
+            9: 9,
+            10: 10,
+            "Jack": 10,
+            "Queen": 10,
+            "King": 10,
+            "Ace": 1
+        }
+        card_value = value_dictionary[rank]
+        # print(f"The value of {rank} is {card_value}") # FOR TESTING ONLY
+        return card_value
+
 
 
 class GameRound:
