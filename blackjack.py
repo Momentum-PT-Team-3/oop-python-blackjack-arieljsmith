@@ -148,10 +148,20 @@ class GameRound:
         # if it ISN'T, then we go into dealer actions.
 
     def total_initial_hand_values(self, dealer, player, dealer_score, player_score):
-        for card in player.hand:
-            player_score += card.value
-        for card in dealer.hand:
-            dealer_score += card.value
+        while dealer_score == 0 or player_score == 0:
+            if dealer_score == 0:
+                for card in dealer.hand:
+                    dealer_score += card.value
+            else:
+                for card in player.hand:
+                    player_score += card.value
+        # NOTE TO SELF: The if/elif below might not work because it doesn't
+        # take into account whether or not the number of cards in either hand
+        # has changed.
+        if len(dealer.hand) > 2:
+            dealer_score += dealer.hand[-1].value
+        elif len(player.hand) > 2:
+            pass
         print(f"DEALER SCORE: {dealer_score}")
         print(f"PLAYER SCORE: {player_score}")
 
