@@ -46,10 +46,14 @@ class Dealer:
     def deal(self, popped_cards):
         for card in popped_cards:
             self.hand.append(card)
-        print("DEALER'S HAND: ", [f"{card}" for card in self.hand])
+        self.show_dealer_hand()
 
-    def hit(self):
-        pass
+    def hit(self, popped_card):
+        self.hand.append(popped_card)
+        self.show_dealer_hand()
+    
+    def show_dealer_hand(self):
+        print("DEALER'S HAND: ", [f"{card}" for card in self.hand])
 
     def reset_dealer_hand(self):
         self.hand = []
@@ -66,10 +70,14 @@ class Player:
     def deal(self, popped_cards):
         for card in popped_cards:
             self.hand.append(card)
-        print("YOUR HAND: ", [f"{card}" for card in self.hand])
+        self.show_player_hand()
 
-    def hit(self):
-        pass
+    def hit(self, popped_card):
+        self.hand.append(popped_card)
+        self.show_player_hand()
+
+    def show_player_hand(self):
+        print("PLAYER'S HAND: ", [f"{card}" for card in self.hand])
 
     def reset_player_hand(self):
         self.hand = []
@@ -98,8 +106,15 @@ class Deck:
         player.deal(player_tuple)
         self.show_cards()
 
-    def hit(self):
-        pass
+    def player_hit(self, player):
+        popped_card = self.deck.pop()
+        player.hit(popped_card)
+        self.show_cards()
+
+    def dealer_hit(self, dealer):
+        popped_card = self.deck.pop()
+        dealer.hit(popped_card)
+        self.show_cards()
 
     def show_cards(self):
         print("The cards in this deck include: ", [f"{card}" for card in self.deck])
@@ -143,7 +158,7 @@ class GameRound:
 
         self.deck.deal(dealer, player)
         self.total_initial_hand_values(dealer, player, self.dealer_score, self.player_score)
-        self.prompt_hit_or_stand()
+        self.prompt_hit_or_stand(player)
         # function to check if player's hand is at 21. If it is, they win!
         # if it ISN'T, then we go into dealer actions.
 
@@ -165,13 +180,13 @@ class GameRound:
         print(f"DEALER SCORE: {dealer_score}")
         print(f"PLAYER SCORE: {player_score}")
 
-    def prompt_hit_or_stand(self):
+    def prompt_hit_or_stand(self, player):
         # While summed value of player's hand is less than 21...
             player_choice = input("Hit or stand? ")
             if (player_choice.lower() != "hit") and (player_choice.lower() != "stand"):
                 print("Invalid input. Please only enter 'hit' or 'stand'.")
             elif player_choice.lower() == "hit":
-                pass
+                self.deck.player_hit(player)
             else:
                 pass
 
