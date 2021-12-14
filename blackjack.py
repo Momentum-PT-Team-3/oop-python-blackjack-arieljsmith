@@ -30,6 +30,8 @@
 # =============================================================================
 
 import random
+SUITES = ["diamonds", "spades", "clubs", "hearts"]
+PIPS = [2, 3, 4, 5, 6, 7, 8, 9, 10, "Jack", "Queen", "King", "Ace"]
 
 
 # =============================================================================
@@ -50,8 +52,7 @@ class Dealer:
 
     def hit(self, popped_card):
         self.hand.append(popped_card)
-        self.show_dealer_hand()
-    
+
     def show_dealer_hand(self):
         print("DEALER'S HAND: ", [f"{card}" for card in self.hand])
 
@@ -74,7 +75,6 @@ class Player:
 
     def hit(self, popped_card):
         self.hand.append(popped_card)
-        self.show_player_hand()
 
     def show_player_hand(self):
         print("PLAYER'S HAND: ", [f"{card}" for card in self.hand])
@@ -85,7 +85,7 @@ class Player:
 
 class Deck:
     def __init__(self):
-        self.deck = self.build(["diamonds", "spades", "clubs", "hearts"], [2, 3, 4, 5, 6, 7, 8, 9, 10, "Jack", "Queen", "King", "Ace"])
+        self.deck = self.build(SUITES, PIPS)
 
     def __str__(self):
         return str(self.deck)
@@ -106,14 +106,18 @@ class Deck:
         player.deal(player_tuple)
         self.show_cards()
 
-    def player_hit(self, player):
+    def player_hit(self, player, dealer):
         popped_card = self.deck.pop()
         player.hit(popped_card)
+        player.show_player_hand()
+        dealer.show_dealer_hand()
         self.show_cards()
 
-    def dealer_hit(self, dealer):
+    def dealer_hit(self, player, dealer):
         popped_card = self.deck.pop()
         dealer.hit(popped_card)
+        player.show_player_hand()
+        dealer.show_dealer_hand()
         self.show_cards()
 
     def show_cards(self):
@@ -155,40 +159,127 @@ class GameRound:
         self.deck = Deck()
         self.dealer_score = 0
         self.player_score = 0
+        self.winner_declared = False
 
         self.deck.deal(dealer, player)
-        self.total_initial_hand_values(dealer, player, self.dealer_score, self.player_score)
-        self.prompt_hit_or_stand(player)
-        # function to check if player's hand is at 21. If it is, they win!
-        # if it ISN'T, then we go into dealer actions.
+        self.hand_values(dealer, player)
+        self.recalculate_dealer_ace_value(dealer, player)
+        self.recalculate_player_ace_value(dealer, player)
+        print(f"PLAYER SCORE: {self.player_score}")
+        print(f"DEALER SCORE: {self.dealer_score}")
 
-    def total_initial_hand_values(self, dealer, player, dealer_score, player_score):
-        for card in player.hand:
-            player_score += card.value
-        for card in dealer.hand:
-            dealer_score += card.value
-        print(f"DEALER SCORE: {dealer_score}")
-        print(f"PLAYER SCORE: {player_score}")
-
-    def total_subsequent_player_hand_values(self, player, dealer_score, player_score):
-        player_score += player.hand[-1].value
-        print(f"DEALER SCORE: {dealer_score}")
-        print(f"PLAYER SCORE: {player_score}")
-
-    def total_subsequent_dealer_hand_values(self, dealer, dealer_score, player_score):
-        dealer_score += dealer.hand[-1].value
-        print(f"DEALER SCORE: {dealer_score}")
-        print(f"PLAYER SCORE: {player_score}")
-
-    def prompt_hit_or_stand(self, player):
-        # While summed value of player's hand is less than 21...
-            player_choice = input("Hit or stand? ")
-            if (player_choice.lower() != "hit") and (player_choice.lower() != "stand"):
-                print("Invalid input. Please only enter 'hit' or 'stand'.")
-            elif player_choice.lower() == "hit":
-                self.deck.player_hit(player)
+        while self.winner_declared is False:
+            if self.player_score == 21:
+                print("You win!")
+                self.winner_declared = True
+            elif self.dealer_score == 21:
+                print("Dealer wins!")
+                self.winner_declared = True
             else:
-                pass
+                self.prompt_hit_or_stand(player, dealer)
+                if self.player_score == 21:
+                    print("You win!")
+                    self.winner_declared = True
+                else:
+                    self.dealer_hit_loop(player, dealer)
+                    if self.dealer_score == 21:
+                        print("Dealer wins!")
+                        self.winner_declared = True
+                    elif self.dealer_score > 21:
+                        if self.player_score < self.dealer_score:
+                            print("You win!")
+                            self.winner_declared = True
+                        elif self.player_score == self.dealer_score:
+                            print("It's a draw!")
+                            self.winner_declared = True
+                        else:
+                            print("Dealer wins!")
+                            self.winner_declared = True
+                    else: # if self.dealer_score < 21
+                        if 21 > self.player_score > self.dealer_score:
+                            print("You win!")
+                            self.winner_declared = True
+                        elif self.player_score == self.dealer_score:
+                            print("It's a draw!")
+                            self.winner_declared = True
+                        else:
+                            print("Dealer wins!")
+                            self.winner_declared = True
+                    # Dealer now draws
+
+    def hand_values(self, dealer, player):
+    # def total_initial_hand_values(self, dealer, player):
+        player_hand_values = []
+        dealer_hand_values = []
+        for card in player.hand:
+            player_hand_values.append(card.value)
+        for card in dealer.hand:
+            dealer_hand_values.append(card.value)
+        self.player_score = sum(player_hand_values)
+        self.dealer_score = sum(dealer_hand_values)
+
+        # OLD VERSION
+        # for card in player.hand:
+        #     self.player_score += card.value
+        # for card in dealer.hand:
+        #     self.dealer_score += card.value
+        # print(f"DEALER SCORE: {self.dealer_score}")
+        # print(f"PLAYER SCORE: {self.player_score}")
+
+    # def total_subsequent_player_hand_values(self, player):
+    #     self.player_score += player.hand[-1].value
+    #     print(f"DEALER SCORE: {self.dealer_score}")
+    #     print(f"PLAYER SCORE: {self.player_score}")
+
+    # def total_subsequent_dealer_hand_values(self, dealer):
+    #     self.dealer_score += dealer.hand[-1].value
+    #     print(f"DEALER SCORE: {self.dealer_score}")
+    #     print(f"PLAYER SCORE: {self.player_score}")
+
+    def recalculate_player_ace_value(self, dealer, player):
+        for card in player.hand:
+            if card.rank == "Ace":
+                if (card.value == 1) and (self.player_score + 10 <= 21):
+                    card.value = 11 
+                    self.hand_values(dealer, player)
+                    print("Value *SHOULD* now be 11")
+                elif (card.value == 11) and (self.player_score > 21):
+                    card.value = 1
+                    self.hand_values(dealer, player)
+                    print("Value *SHOULD* now be 1")
+                else:
+                    print("Value *SHOULD* be whatever it already was")
+
+    def recalculate_dealer_ace_value(self, dealer, player):
+        for card in dealer.hand:
+            if card.rank == "Ace":
+                if (card.rank == 1) and (self.dealer_score + 10 <= 21):
+                    card.rank = 11 
+                    hand_values(dealer, player)
+                elif (card.rank == 11) and (self.dealer_score > 21):
+                    card.rank = 1
+                    hand_values(dealer, player)
+
+    def prompt_hit_or_stand(self, player, dealer):
+        player_stand = False
+        if (self.player_score < 21) and (self.dealer_score < 21) and (player_stand is False):
+            while (self.player_score < 21) and (player_stand is False):
+                player_choice = input("Hit or stand? ")
+                if (player_choice.lower() != "hit") and (player_choice.lower() != "stand"):
+                    print("Invalid input. Please only enter 'hit' or 'stand'.")
+                elif player_choice.lower() == "hit":
+                    self.deck.player_hit(player, dealer)
+                    self.hand_values(dealer, player)
+                    self.recalculate_player_ace_value(dealer, player)
+                else:
+                    print("Player has chosen to stand.")
+                    player_stand = True
+
+    def dealer_hit_loop(self, player, dealer):
+        while self.dealer_score < 17:
+            self.deck.dealer_hit(player, dealer)
+            self.hand_values(dealer, player)
+            self.recalculate_dealer_ace_value(dealer, player)
 
 
 class Game:
