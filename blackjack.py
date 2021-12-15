@@ -3,13 +3,14 @@
 # =============================================================================
 
 import random
+import time
 
 
 # =============================================================================
 # C O N S T A N T S
 # =============================================================================
 
-SUITES = ["diamonds", "spades", "clubs", "hearts"]
+SUITES = ["♦️ ", "♠️ ", "♣️ ", "♥️ "]
 PIPS = [2, 3, 4, 5, 6, 7, 8, 9, 10, "Jack", "Queen", "King", "Ace"]
 
 
@@ -33,7 +34,7 @@ class Dealer:
         self.hand.append(popped_card)
 
     def show_dealer_hand(self):
-        print("DEALER'S HAND: ", [f"{card}" for card in self.hand])
+        print(" DEALER'S HAND: ", [f"{card}" for card in self.hand])
 
     def reset_dealer_hand(self):
         self.hand = []
@@ -41,7 +42,7 @@ class Dealer:
 
 class Player:
     def __init__(self):
-        self.name = input("What is your name? ")
+        self.name = input(" What is your name? ")
         self.hand = []
 
     def __str__(self):
@@ -56,7 +57,7 @@ class Player:
         self.hand.append(popped_card)
 
     def show_player_hand(self):
-        print("PLAYER'S HAND: ", [f"{card}" for card in self.hand])
+        print(" PLAYER'S HAND: ", [f"{card}" for card in self.hand])
 
     def reset_player_hand(self):
         self.hand = []
@@ -88,19 +89,19 @@ class Deck:
     def player_hit(self, player, dealer):
         popped_card = self.deck.pop()
         player.hit(popped_card)
-        player.show_player_hand()
         dealer.show_dealer_hand()
+        player.show_player_hand()
         # self.show_cards()
 
     def dealer_hit(self, player, dealer):
         popped_card = self.deck.pop()
         dealer.hit(popped_card)
-        player.show_player_hand()
         dealer.show_dealer_hand()
+        player.show_player_hand()
         # self.show_cards()
 
     def show_cards(self):
-        print("The cards in this deck include: ", [f"{card}" for card in self.deck])
+        print(" The cards in this deck include: ", [f"{card}" for card in self.deck])
 
 
 class Card:
@@ -139,49 +140,101 @@ class GameRound:
         self.player_score = 0
         self.winner_declared = False
 
+        print()
+        print(" ============================================")
+        print(" ============================================")
+        print()
+        print(" Dealing cards...")
+        print()
+        time.sleep(1)
+
         self.deck.deal(dealer, player)
         self.hand_values(dealer, player)
         self.recalculate_dealer_ace_value(dealer, player)
         self.recalculate_player_ace_value(dealer, player)
-        print(f"PLAYER SCORE: {self.player_score}")
-        print(f"DEALER SCORE: {self.dealer_score}")
+
+        print()
+        time.sleep(0.8)
+
+        print(f" DEALER SCORE: {self.dealer_score}")
+        print(f" PLAYER SCORE: {self.player_score}")
 
         while self.winner_declared is False:
             if self.player_score == 21:
-                print("You win!")
+                time.sleep(0.8)
+                print()
+                print("  - - - - - - - - - - - - - - - - - - - - - -")
+                print()
+                print(" You win!")
                 self.winner_declared = True
             elif self.dealer_score == 21:
-                print("Dealer wins!")
+                time.sleep(0.8)
+                print()
+                print("  - - - - - - - - - - - - - - - - - - - - - -")
+                print()
+                print(" Dealer wins!")
                 self.winner_declared = True
             else:
                 self.prompt_hit_or_stand(player, dealer)
                 if self.player_score == 21:
-                    print("You win!")
+                    time.sleep(0.8)
+                    print()
+                    print("  - - - - - - - - - - - - - - - - - - - - - -")
+                    print()
+                    print(" You win!")
                     self.winner_declared = True
                 else:
                     self.dealer_hit_loop(player, dealer)
                     if self.dealer_score == 21:
-                        print("Dealer wins!")
+                        time.sleep(0.8)
+                        print()
+                        print("  - - - - - - - - - - - - - - - - - - - - - -")
+                        print()
+                        print(" Dealer wins!")
                         self.winner_declared = True
                     elif self.dealer_score > 21:
                         if self.player_score < self.dealer_score:
-                            print("You win!")
+                            time.sleep(0.8)
+                            print()
+                            print("  - - - - - - - - - - - - - - - - - - - - - -")
+                            print()
+                            print(" You win!")
                             self.winner_declared = True
                         elif self.player_score == self.dealer_score:
-                            print("It's a draw!")
+                            time.sleep(0.8)
+                            print()
+                            print("  - - - - - - - - - - - - - - - - - - - - - -")
+                            print()
+                            print(" It's a draw!")
                             self.winner_declared = True
                         else:
-                            print("Dealer wins!")
+                            time.sleep(0.8)
+                            print()
+                            print("  - - - - - - - - - - - - - - - - - - - - - -")
+                            print()
+                            print(" Dealer wins!")
                             self.winner_declared = True
                     else:
                         if 21 > self.player_score > self.dealer_score:
-                            print("You win!")
+                            time.sleep(0.8)
+                            print()
+                            print("  - - - - - - - - - - - - - - - - - - - - - -")
+                            print()
+                            print(" You win!")
                             self.winner_declared = True
                         elif self.player_score == self.dealer_score:
-                            print("It's a draw!")
+                            time.sleep(0.8)
+                            print()
+                            print("  - - - - - - - - - - - - - - - - - - - - - -")
+                            print()
+                            print(" It's a draw!")
                             self.winner_declared = True
                         else:
-                            print("Dealer wins!")
+                            time.sleep(0.8)
+                            print()
+                            print("  - - - - - - - - - - - - - - - - - - - - - -")
+                            print()
+                            print(" Dealer wins!")
                             self.winner_declared = True
 
     def hand_values(self, dealer, player):
@@ -218,19 +271,30 @@ class GameRound:
         player_stand = False
         if (self.player_score < 21) and (self.dealer_score < 21) and (player_stand is False):
             while (self.player_score < 21) and (player_stand is False):
-                player_choice = input("Hit or stand? ")
+                print()
+                time.sleep(0.8)
+                player_choice = input(" Hit or stand? ")
+                time.sleep(0.8)
+                print()
+                print("  - - - - - - - - - - - - - - - - - - - - - -")
+                print()
                 if (player_choice.lower() != "hit") and (player_choice.lower() != "stand"):
-                    print("Invalid input. Please only enter 'hit' or 'stand'.")
+                    print(" Invalid input. Please only enter 'hit' or 'stand'.")
                 elif player_choice.lower() == "hit":
                     self.deck.player_hit(player, dealer)
                     self.hand_values(dealer, player)
                     self.recalculate_player_ace_value(dealer, player)
                 else:
-                    print("Player has chosen to stand.")
+                    print()
+                    print(" Player has chosen to stand.")
                     player_stand = True
 
     def dealer_hit_loop(self, player, dealer):
         while self.dealer_score < 17:
+            print()
+            time.sleep(0.8)
+            print("  - - - - - - - - - - - - - - - - - - - - - -")
+            print()
             self.deck.dealer_hit(player, dealer)
             self.hand_values(dealer, player)
             self.recalculate_dealer_ace_value(dealer, player)
@@ -243,19 +307,23 @@ class Game:
         self.dealer = Dealer()
 
     def start(self):
+        print()
+        time.sleep(0.5)
+        print(f" Hello, {self.player.name}.")
+        time.sleep(1)
         while not self.end_game:
             GameRound(self.player, self.dealer)
             self.check_end_condition()
 
     def check_end_condition(self):
-        answer = input("Would you like to play another round? y/n: ")
+        answer = input(" Would you like to play another round? y/n: ")
         if answer == "y":
             self.player.reset_player_hand()
             self.dealer.reset_dealer_hand()
             GameRound(self.player, self.dealer)
             self.check_end_condition()
         else:
-            print("Thank you for playing!")
+            print(" Thank you for playing!")
             self.end_game = True
 
 
@@ -263,7 +331,17 @@ class Game:
 # W H E R E  S H I R T  H A P P E N S
 # =============================================================================
 
+print()
 game = Game()
 game.start()
 
-# Adding this comment to test something
+# ON-DECK: Formatting everything to look a bit better during gameplay
+
+# THINGS TO IMPLEMENT
+# Break up GameRound __init__ into smaller functions where sensible
+# Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
+# running tally of number of player wins and dealer wins
+# hide dealer second card until it starts to hit
+# check that I'm not using more parameters than needed for my methods--prune where possible.
+
+# PIE-IN-THE-SKY: Splitting! oooooo
