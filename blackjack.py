@@ -170,12 +170,7 @@ class GameRound:
         dealer.recalculate_ace_values()
         player.recalculate_ace_values()
         self.hand_values(dealer, player)
-
-        print()
-        time.sleep(0.8)
-
-        print(f" DEALER SCORE: {dealer.hand[0].value} + ?")
-        print(f" {player.name.upper()}'S SCORE: {player.score}")
+        self.present_scores_while_dealercard_hidden(player, dealer)
 
         self.determine_winner(dealer, player)
 
@@ -345,12 +340,7 @@ class GameRound:
                     self.hand_values(dealer, player)
                     player.recalculate_ace_values()
                     self.hand_values(dealer, player)
-
-                    print()
-                    time.sleep(0.8)
-
-                    print(f" DEALER SCORE: {dealer.hand[0].value} + ?")
-                    print(f" {player.name.upper()}'S SCORE: {player.score}")
+                    self.present_scores_while_dealercard_hidden(player, dealer)
                 else:
                     print(f" {player.name} has chosen to stand.")
                     player_stand = True
@@ -378,6 +368,13 @@ class GameRound:
 
             print(f" DEALER SCORE: {dealer.score}")
             print(f" {player.name.upper()}'S SCORE: {player.score}")
+
+    def present_scores_while_dealercard_hidden(self, player, dealer):
+        print()
+        time.sleep(0.8)
+
+        print(f" DEALER SCORE: {dealer.hand[0].value} + ?")
+        print(f" {player.name.upper()}'S SCORE: {player.score}")
 
 
 class Game:
