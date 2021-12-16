@@ -17,6 +17,7 @@
 # Make value_dictionary a global constant
 # Break up GameRound __init__ into smaller functions where sensible
     # SUB-WISH: Create formatting method to gather all the dividing lines and empty lines, maybe even the pauses, etc.
+# Consider bundling the functionality of the calculate_value method in the Card class instead with the build method in the Deck class
 # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
 # check that I'm not using more parameters than needed for my methods--prune where possible.
 # Docstrings! Doc! Strings!
