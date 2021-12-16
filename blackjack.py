@@ -3,7 +3,8 @@
 # =============================================================================
 
 # ON DECK:
-    # Try to remove recalculate_player_ace_value and recalculate_dealer_ace_value methods from GameRound and consolidate into a single method in Player class
+    # Break up GameRound __init__ into smaller functions where sensible
+        # SUB-WISH: Create formatting method to gather all the dividing lines and empty lines, maybe even the pauses, etc.
 
 # COMPLETE (OF WISHLIST ITEMS):
     # Formatting everything to look a bit better during gameplay
@@ -14,10 +15,9 @@
     # Remove unnecessary winner_declared attribute from GameRound
     # IMPROVEMENT: If player stands and dealer wins without making a move, we currently don't see the dealer's hand or score. This would be nice to know.
     # Make value_dictionary a global constant
+    # Remove recalculate_player_ace_value and recalculate_dealer_ace_value methods from GameRound and consolidate into a single method in Player class
 
 # WISHLIST
-    # Break up GameRound __init__ into smaller functions where sensible
-        # SUB-WISH: Create formatting method to gather all the dividing lines and empty lines, maybe even the pauses, etc.
     # Consider bundling the functionality of the calculate_value method in the Card class instead with the build method in the Deck class
     # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
     # check that I'm not using more parameters than needed for my methods--prune where possible.
@@ -76,6 +76,16 @@ class Player:
 
     def __str__(self):
         return self.name
+
+    def recalculate_ace_values(self):
+        for card in self.hand:
+            if card.rank == "Ace":
+                if (card.value == 1) and (self.score + 10 <= 21):
+                    card.value = 11
+                    # self.hand_values(dealer, player) # NOTE: NOW NEED TO HANDLE THIS OUTSIDE OF THE FUNCTION WHEREVER IT'S CALLED
+                elif (card.value == 11) and (self.score > 21):
+                    card.value = 1
+                    # self.hand_values(dealer, player) # NOTE: NOW NEED TO HANDLE THIS OUTSIDE OF THE FUNCTION WHEREVER IT'S CALLED
 
     def show_hand(self):
         print(f" {self.name.upper()}'S HAND: ", [f"{card}" for card in self.hand])
@@ -179,8 +189,9 @@ class GameRound:
 
         self.deck.deal(dealer, player)
         self.hand_values(dealer, player)
-        self.recalculate_dealer_ace_value(dealer, player)
-        self.recalculate_player_ace_value(dealer, player)
+        dealer.recalculate_ace_values()
+        player.recalculate_ace_values()
+        self.hand_values(dealer, player)
 
         print()
         time.sleep(0.8)
@@ -338,25 +349,25 @@ class GameRound:
         player.score = sum(player_hand_values)
         dealer.score = sum(dealer_hand_values)
 
-    def recalculate_player_ace_value(self, dealer, player):
-        for card in player.hand:
-            if card.rank == "Ace":
-                if (card.value == 1) and (player.score + 10 <= 21):
-                    card.value = 11
-                    self.hand_values(dealer, player)
-                elif (card.value == 11) and (player.score > 21):
-                    card.value = 1
-                    self.hand_values(dealer, player)
+    # def recalculate_player_ace_value(self, dealer, player):
+    #     for card in player.hand:
+    #         if card.rank == "Ace":
+    #             if (card.value == 1) and (player.score + 10 <= 21):
+    #                 card.value = 11
+    #                 self.hand_values(dealer, player)
+    #             elif (card.value == 11) and (player.score > 21):
+    #                 card.value = 1
+    #                 self.hand_values(dealer, player)
 
-    def recalculate_dealer_ace_value(self, dealer, player):
-        for card in dealer.hand:
-            if card.rank == "Ace":
-                if (card.value == 1) and (dealer.score + 10 <= 21):
-                    card.value = 11
-                    self.hand_values(dealer, player)
-                elif (card.value == 11) and (dealer.score > 21):
-                    card.value = 1
-                    self.hand_values(dealer, player)
+    # def recalculate_dealer_ace_value(self, dealer, player):
+    #     for card in dealer.hand:
+    #         if card.rank == "Ace":
+    #             if (card.value == 1) and (dealer.score + 10 <= 21):
+    #                 card.value = 11
+    #                 self.hand_values(dealer, player)
+    #             elif (card.value == 11) and (dealer.score > 21):
+    #                 card.value = 1
+    #                 self.hand_values(dealer, player)
 
     def prompt_hit_or_stand(self, player, dealer):
         player_stand = False
@@ -374,7 +385,8 @@ class GameRound:
                 elif player_choice.lower() == "hit":
                     self.deck.player_hit(player, dealer)
                     self.hand_values(dealer, player)
-                    self.recalculate_player_ace_value(dealer, player)
+                    player.recalculate_ace_values()
+                    self.hand_values(dealer, player)
 
                     print()
                     time.sleep(0.8)
@@ -400,7 +412,8 @@ class GameRound:
             time.sleep(0.8)
             self.deck.dealer_hit(player, dealer)
             self.hand_values(dealer, player)
-            self.recalculate_dealer_ace_value(dealer, player)
+            dealer.recalculate_ace_values()
+            self.hand_values(dealer, player)
 
             print()
             time.sleep(0.8)
