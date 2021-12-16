@@ -10,6 +10,7 @@
 # running tally of number of player wins and dealer wins
 # hide dealer second card until it starts to hit
 # FIXED: ERROR: If dealer starts with an ace and a jack, for example, code won't recognize that it's at 21 before the dealer hits. Therefore, when the dealer *could* have won, they don't currently.
+# Remove unnecessary winner_declared attribute from GameRound
 
 # WISHLIST
 # I *think* if the dealer starts with an Ace and a 10, it will immediately say the dealer won. Therefore, if the player plays enough rounds they might catch on to this. Rearrange logic so that dealer is only declared a winner for a score of 21 after player has already gone through their hit or stand loop.
@@ -142,7 +143,6 @@ class Card:
 class GameRound:
     def __init__(self, player, dealer):
         self.deck = Deck()
-        self.winner_declared = False
 
         print()
         print(" ============================================")
@@ -163,7 +163,22 @@ class GameRound:
         print(f" DEALER SCORE: {dealer.hand[0].value} + ?")
         print(f" {player.name.upper()}'S SCORE: {player.score}")
 
-        while self.winner_declared is False:
+        if player.score == 21:
+            time.sleep(2)
+            print()
+            print("  - - - - - - - - - - - - - - - - - - - - - -")
+            print()
+            print(" You win!")
+            player.total_wins += 1
+        elif dealer.score == 21:
+            time.sleep(2)
+            print()
+            print("  - - - - - - - - - - - - - - - - - - - - - -")
+            print()
+            print(" Dealer wins!")
+            dealer.total_wins += 1
+        else:
+            self.prompt_hit_or_stand(player, dealer)
             if player.score == 21:
                 time.sleep(2)
                 print()
@@ -171,83 +186,57 @@ class GameRound:
                 print()
                 print(" You win!")
                 player.total_wins += 1
-                self.winner_declared = True
-            elif dealer.score == 21:
-                time.sleep(2)
-                print()
-                print("  - - - - - - - - - - - - - - - - - - - - - -")
-                print()
-                print(" Dealer wins!")
-                dealer.total_wins += 1
-                self.winner_declared = True
             else:
-                self.prompt_hit_or_stand(player, dealer)
-                if player.score == 21:
+                self.dealer_hit_loop(player, dealer)
+                if dealer.score == 21:
                     time.sleep(2)
                     print()
                     print("  - - - - - - - - - - - - - - - - - - - - - -")
                     print()
-                    print(" You win!")
-                    player.total_wins += 1
-                    self.winner_declared = True
-                else:
-                    self.dealer_hit_loop(player, dealer)
-                    if dealer.score == 21:
+                    print(" Dealer wins!")
+                    dealer.total_wins += 1
+                elif dealer.score > 21:
+                    if player.score < dealer.score:
+                        time.sleep(2)
+                        print()
+                        print("  - - - - - - - - - - - - - - - - - - - - - -")
+                        print()
+                        print(" You win!")
+                        player.total_wins += 1
+                    elif player.score == dealer.score:
+                        time.sleep(2)
+                        print()
+                        print("  - - - - - - - - - - - - - - - - - - - - - -")
+                        print()
+                        print(" It's a draw!")
+                    else:
                         time.sleep(2)
                         print()
                         print("  - - - - - - - - - - - - - - - - - - - - - -")
                         print()
                         print(" Dealer wins!")
                         dealer.total_wins += 1
-                        self.winner_declared = True
-                    elif dealer.score > 21:
-                        if player.score < dealer.score:
-                            time.sleep(2)
-                            print()
-                            print("  - - - - - - - - - - - - - - - - - - - - - -")
-                            print()
-                            print(" You win!")
-                            player.total_wins += 1
-                            self.winner_declared = True
-                        elif player.score == dealer.score:
-                            time.sleep(2)
-                            print()
-                            print("  - - - - - - - - - - - - - - - - - - - - - -")
-                            print()
-                            print(" It's a draw!")
-                            self.winner_declared = True
-                        else:
-                            time.sleep(2)
-                            print()
-                            print("  - - - - - - - - - - - - - - - - - - - - - -")
-                            print()
-                            print(" Dealer wins!")
-                            dealer.total_wins += 1
-                            self.winner_declared = True
+                else:
+                    if 21 > player.score > dealer.score:
+                        time.sleep(2)
+                        print()
+                        print("  - - - - - - - - - - - - - - - - - - - - - -")
+                        print()
+                        print(" You win!")
+                        player.total_wins += 1
+                    elif player.score == dealer.score:
+                        time.sleep(2)
+                        print()
+                        print("  - - - - - - - - - - - - - - - - - - - - - -")
+                        print()
+                        print(" It's a draw!")
                     else:
-                        if 21 > player.score > dealer.score:
-                            time.sleep(2)
-                            print()
-                            print("  - - - - - - - - - - - - - - - - - - - - - -")
-                            print()
-                            print(" You win!")
-                            player.total_wins += 1
-                            self.winner_declared = True
-                        elif player.score == dealer.score:
-                            time.sleep(2)
-                            print()
-                            print("  - - - - - - - - - - - - - - - - - - - - - -")
-                            print()
-                            print(" It's a draw!")
-                            self.winner_declared = True
-                        else:
-                            time.sleep(2)
-                            print()
-                            print("  - - - - - - - - - - - - - - - - - - - - - -")
-                            print()
-                            print(" Dealer wins!")
-                            dealer.total_wins += 1
-                            self.winner_declared = True
+                        time.sleep(2)
+                        print()
+                        print("  - - - - - - - - - - - - - - - - - - - - - -")
+                        print()
+                        print(" Dealer wins!")
+                        dealer.total_wins += 1
         print()
         time.sleep(0.8)
         print(f" DEALER'S WINS: {dealer.total_wins}")
@@ -256,7 +245,7 @@ class GameRound:
         print("  - - - - - - - - - - - - - - - - - - - - - -")
 
     def __str__(self):
-        return f"WINNER HAS BEEN DECLARED: {self.winner_declared}"
+        return "Ceci n'est pas une Game."
 
     def hand_values(self, dealer, player):
         player_hand_values = []
