@@ -2,29 +2,31 @@
 # N O T E S
 # =============================================================================
 
-# UP NEXT: Try to remove recalculate_player_ace_value and recalculate_dealer_ace_value methods from GameRound and consolidate into a single method in Player class
+# ON DECK:
+    # Try to remove recalculate_player_ace_value and recalculate_dealer_ace_value methods from GameRound and consolidate into a single method in Player class
 
-# DONE (OF WISHLIST ITEMS)
-# Formatting everything to look a bit better during gameplay
-# make dealer or player a subclass of the other
-# running tally of number of player wins and dealer wins
-# hide dealer second card until it starts to hit
-# FIXED: ERROR: If dealer starts with an ace and a jack, for example, code won't recognize that it's at 21 before the dealer hits. Therefore, when the dealer *could* have won, they don't currently.
-# Remove unnecessary winner_declared attribute from GameRound
-# IMPROVEMENT: If player stands and dealer wins without making a move, we currently don't see the dealer's hand or score. This would be nice to know.
+# COMPLETE (OF WISHLIST ITEMS):
+    # Formatting everything to look a bit better during gameplay
+    # make dealer or player a subclass of the other
+    # running tally of number of player wins and dealer wins
+    # hide dealer second card until it starts to hit
+    # FIXED: ERROR: If dealer starts with an ace and a jack, for example, code won't recognize that it's at 21 before the dealer hits. Therefore, when the dealer *could* have won, they don't currently.
+    # Remove unnecessary winner_declared attribute from GameRound
+    # IMPROVEMENT: If player stands and dealer wins without making a move, we currently don't see the dealer's hand or score. This would be nice to know.
+    # Make value_dictionary a global constant
 
 # WISHLIST
-# Make value_dictionary a global constant
-# Break up GameRound __init__ into smaller functions where sensible
-    # SUB-WISH: Create formatting method to gather all the dividing lines and empty lines, maybe even the pauses, etc.
-# Consider bundling the functionality of the calculate_value method in the Card class instead with the build method in the Deck class
-# Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
-# check that I'm not using more parameters than needed for my methods--prune where possible.
-# Docstrings! Doc! Strings!
-# Keep same deck through multiple rounds until it's empty, then create new deck.
-# Make any mentions of a card's pips, suits, ranks, values, etc. consistent (i.e. in some areas the card's pip is referred to as its rank, which is wording I started out using but moved on from midway through)
+    # Break up GameRound __init__ into smaller functions where sensible
+        # SUB-WISH: Create formatting method to gather all the dividing lines and empty lines, maybe even the pauses, etc.
+    # Consider bundling the functionality of the calculate_value method in the Card class instead with the build method in the Deck class
+    # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
+    # check that I'm not using more parameters than needed for my methods--prune where possible.
+    # Docstrings! Doc! Strings!
+    # Keep same deck through multiple rounds until it's empty, then create new deck.
+    # Make any mentions of a card's pips, suits, ranks, values, etc. consistent (i.e. in some areas the card's pip is referred to as its rank, which is wording I started out using but moved on from midway through)
 
-# PIE-IN-THE-SKY: Splitting! oooooo
+# LONG-TERM:
+    # Splitting! oooooo
 
 
 # =============================================================================
@@ -41,6 +43,21 @@ import time
 
 SUITES = ["♦️ ", "♠️ ", "♣️ ", "♥️ "]
 PIPS = [2, 3, 4, 5, 6, 7, 8, 9, 10, "Jack", "Queen", "King", "Ace"]
+VALUES = {
+    2: 2,
+    3: 3,
+    4: 4,
+    5: 5,
+    6: 6,
+    7: 7,
+    8: 8,
+    9: 9,
+    10: 10,
+    "Jack": 10,
+    "Queen": 10,
+    "King": 10,
+    "Ace": 1
+}
 
 print()
 time.sleep(0.8)
@@ -124,22 +141,22 @@ class Card:
         return f"{self.rank} of {self.suit}"
 
     def calculate_value(self, rank):
-        value_dictionary = {
-            2: 2,
-            3: 3,
-            4: 4,
-            5: 5,
-            6: 6,
-            7: 7,
-            8: 8,
-            9: 9,
-            10: 10,
-            "Jack": 10,
-            "Queen": 10,
-            "King": 10,
-            "Ace": 1
-        }
-        card_value = value_dictionary[rank]
+        # value_dictionary = {
+        #     2: 2,
+        #     3: 3,
+        #     4: 4,
+        #     5: 5,
+        #     6: 6,
+        #     7: 7,
+        #     8: 8,
+        #     9: 9,
+        #     10: 10,
+        #     "Jack": 10,
+        #     "Queen": 10,
+        #     "King": 10,
+        #     "Ace": 1
+        # }
+        card_value = VALUES[rank]
         return card_value
 
 
