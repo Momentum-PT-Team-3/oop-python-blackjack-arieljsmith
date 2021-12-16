@@ -10,6 +10,7 @@
 
 # WISHLIST
 # ERROR: If dealer starts with an ace and a jack, for example, code won't recognize that it's at 21 before the dealer hits. Therefore, when the dealer *could* have won, they don't currently.
+# IMPROVEMENT: If player stands and dealer wins without making a move, we currently don't see the dealer's hand or score. This would be nice to know.
 # Break up GameRound __init__ into smaller functions where sensible
 # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
 # check that I'm not using more parameters than needed for my methods--prune where possible.
@@ -251,6 +252,9 @@ class GameRound:
         print()
         print("  - - - - - - - - - - - - - - - - - - - - - -")
 
+    def __str__(self):
+        return f"WINNER HAS BEEN DECLARED: {self.winner_declared}"
+
     def hand_values(self, dealer, player):
         player_hand_values = []
         dealer_hand_values = []
@@ -337,6 +341,9 @@ class Game:
         self.end_game = False
         self.player = Player()
         self.dealer = Dealer()
+
+    def __str__(self):
+        return f"THE PLAYER'S NAME IS {self.player.name}."
 
     def start(self):
         print()
