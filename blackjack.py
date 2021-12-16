@@ -6,13 +6,14 @@
 # Formatting everything to look a bit better during gameplay
 # make dealer or player a subclass of the other
 # running tally of number of player wins and dealer wins
+# hide dealer second card until it starts to hit
 
 # WISHLIST
 # Break up GameRound __init__ into smaller functions where sensible
 # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
-# hide dealer second card until it starts to hit
 # check that I'm not using more parameters than needed for my methods--prune where possible.
 # Docstrings! Doc! Strings!
+# Keep same deck through multiple rounds until it's empty, then create new deck.
 
 # PIE-IN-THE-SKY: Splitting! oooooo
 
@@ -52,7 +53,6 @@ class Player:
     def deal(self, popped_cards):
         for card in popped_cards:
             self.hand.append(card)
-        self.show_hand()
 
     def hit(self, popped_card):
         self.hand.append(popped_card)
@@ -90,21 +90,20 @@ class Deck:
         player_tuple = (self.deck.pop(), self.deck.pop())
         dealer.deal(dealer_tuple)
         player.deal(player_tuple)
-        # self.show_cards()
+        print(f" {dealer.name.upper()}'S HAND: ['{dealer.hand[0]}', --------]")
+        player.show_hand()
 
     def player_hit(self, player, dealer):
         popped_card = self.deck.pop()
         player.hit(popped_card)
-        dealer.show_hand()
+        print(f" {dealer.name.upper()}'S HAND: ['{dealer.hand[0]}', --------]")
         player.show_hand()
-        # self.show_cards()
 
     def dealer_hit(self, player, dealer):
         popped_card = self.deck.pop()
         dealer.hit(popped_card)
         dealer.show_hand()
         player.show_hand()
-        # self.show_cards()
 
     def show_cards(self):
         print(" The cards in this deck include: ", [f"{card}" for card in self.deck])
@@ -162,12 +161,12 @@ class GameRound:
         print()
         time.sleep(0.8)
 
-        print(f" DEALER SCORE: {self.dealer_score}")
+        print(f" DEALER SCORE: {dealer.hand[0].value} + ?")
         print(f" {player.name.upper()}'S SCORE: {self.player_score}")
 
         while self.winner_declared is False:
             if self.player_score == 21:
-                time.sleep(0.8)
+                time.sleep(2)
                 print()
                 print("  - - - - - - - - - - - - - - - - - - - - - -")
                 print()
@@ -175,7 +174,7 @@ class GameRound:
                 player.total_wins += 1
                 self.winner_declared = True
             elif self.dealer_score == 21:
-                time.sleep(0.8)
+                time.sleep(2)
                 print()
                 print("  - - - - - - - - - - - - - - - - - - - - - -")
                 print()
@@ -185,7 +184,7 @@ class GameRound:
             else:
                 self.prompt_hit_or_stand(player, dealer)
                 if self.player_score == 21:
-                    time.sleep(0.8)
+                    time.sleep(2)
                     print()
                     print("  - - - - - - - - - - - - - - - - - - - - - -")
                     print()
@@ -195,7 +194,7 @@ class GameRound:
                 else:
                     self.dealer_hit_loop(player, dealer)
                     if self.dealer_score == 21:
-                        time.sleep(0.8)
+                        time.sleep(2)
                         print()
                         print("  - - - - - - - - - - - - - - - - - - - - - -")
                         print()
@@ -204,7 +203,7 @@ class GameRound:
                         self.winner_declared = True
                     elif self.dealer_score > 21:
                         if self.player_score < self.dealer_score:
-                            time.sleep(0.8)
+                            time.sleep(2)
                             print()
                             print("  - - - - - - - - - - - - - - - - - - - - - -")
                             print()
@@ -212,14 +211,14 @@ class GameRound:
                             player.total_wins += 1
                             self.winner_declared = True
                         elif self.player_score == self.dealer_score:
-                            time.sleep(0.8)
+                            time.sleep(2)
                             print()
                             print("  - - - - - - - - - - - - - - - - - - - - - -")
                             print()
                             print(" It's a draw!")
                             self.winner_declared = True
                         else:
-                            time.sleep(0.8)
+                            time.sleep(2)
                             print()
                             print("  - - - - - - - - - - - - - - - - - - - - - -")
                             print()
@@ -228,7 +227,7 @@ class GameRound:
                             self.winner_declared = True
                     else:
                         if 21 > self.player_score > self.dealer_score:
-                            time.sleep(0.8)
+                            time.sleep(2)
                             print()
                             print("  - - - - - - - - - - - - - - - - - - - - - -")
                             print()
@@ -236,14 +235,14 @@ class GameRound:
                             player.total_wins += 1
                             self.winner_declared = True
                         elif self.player_score == self.dealer_score:
-                            time.sleep(0.8)
+                            time.sleep(2)
                             print()
                             print("  - - - - - - - - - - - - - - - - - - - - - -")
                             print()
                             print(" It's a draw!")
                             self.winner_declared = True
                         else:
-                            time.sleep(0.8)
+                            time.sleep(2)
                             print()
                             print("  - - - - - - - - - - - - - - - - - - - - - -")
                             print()
@@ -308,7 +307,7 @@ class GameRound:
                     print()
                     time.sleep(0.8)
 
-                    print(f" DEALER SCORE: {self.dealer_score}")
+                    print(f" DEALER SCORE: {dealer.hand[0].value} + ?")
                     print(f" {player.name.upper()}'S SCORE: {self.player_score}")
                 else:
                     print(f" {player.name} has chosen to stand.")
@@ -321,9 +320,12 @@ class GameRound:
     def dealer_hit_loop(self, player, dealer):
         while self.dealer_score < 17:
             print()
-            time.sleep(0.8)
+            time.sleep(2)
             print("  - - - - - - - - - - - - - - - - - - - - - -")
             print()
+            print(" Dealer's turn.")
+            print()
+            time.sleep(0.8)
             self.deck.dealer_hit(player, dealer)
             self.hand_values(dealer, player)
             self.recalculate_dealer_ace_value(dealer, player)
