@@ -9,9 +9,10 @@
 # make dealer or player a subclass of the other
 # running tally of number of player wins and dealer wins
 # hide dealer second card until it starts to hit
+# FIXED: ERROR: If dealer starts with an ace and a jack, for example, code won't recognize that it's at 21 before the dealer hits. Therefore, when the dealer *could* have won, they don't currently.
 
 # WISHLIST
-# ERROR: If dealer starts with an ace and a jack, for example, code won't recognize that it's at 21 before the dealer hits. Therefore, when the dealer *could* have won, they don't currently.
+# I *think* if the dealer starts with an Ace and a 10, it will immediately say the dealer won. Therefore, if the player plays enough rounds they might catch on to this. Rearrange logic so that dealer is only declared a winner for a score of 21 after player has already gone through their hit or stand loop.
 # IMPROVEMENT: If player stands and dealer wins without making a move, we currently don't see the dealer's hand or score. This would be nice to know.
 # Break up GameRound __init__ into smaller functions where sensible
 # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
@@ -280,11 +281,11 @@ class GameRound:
     def recalculate_dealer_ace_value(self, dealer, player):
         for card in dealer.hand:
             if card.rank == "Ace":
-                if (card.rank == 1) and (dealer.score + 10 <= 21):
-                    card.rank = 11
+                if (card.value == 1) and (dealer.score + 10 <= 21):
+                    card.value = 11
                     self.hand_values(dealer, player)
-                elif (card.rank == 11) and (dealer.score > 21):
-                    card.rank = 1
+                elif (card.value == 11) and (dealer.score > 21):
+                    card.value = 1
                     self.hand_values(dealer, player)
 
     def prompt_hit_or_stand(self, player, dealer):
