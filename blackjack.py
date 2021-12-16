@@ -11,10 +11,9 @@
 # hide dealer second card until it starts to hit
 # FIXED: ERROR: If dealer starts with an ace and a jack, for example, code won't recognize that it's at 21 before the dealer hits. Therefore, when the dealer *could* have won, they don't currently.
 # Remove unnecessary winner_declared attribute from GameRound
+# IMPROVEMENT: If player stands and dealer wins without making a move, we currently don't see the dealer's hand or score. This would be nice to know.
 
 # WISHLIST
-# I *think* if the dealer starts with an Ace and a 10, it will immediately say the dealer won. Therefore, if the player plays enough rounds they might catch on to this. Rearrange logic so that dealer is only declared a winner for a score of 21 after player has already gone through their hit or stand loop.
-# IMPROVEMENT: If player stands and dealer wins without making a move, we currently don't see the dealer's hand or score. This would be nice to know.
 # Break up GameRound __init__ into smaller functions where sensible
 # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
 # check that I'm not using more parameters than needed for my methods--prune where possible.
@@ -163,11 +162,37 @@ class GameRound:
         print(f" DEALER SCORE: {dealer.hand[0].value} + ?")
         print(f" {player.name.upper()}'S SCORE: {player.score}")
 
-        if player.score == 21:
+        if player.score == 21 and dealer.score == 21:
             time.sleep(2)
             print()
             print("  - - - - - - - - - - - - - - - - - - - - - -")
             print()
+            print(" Revealing dealer card...")
+            print()
+            time.sleep(0.8)
+            dealer.show_hand()
+            player.show_hand()
+            print()
+            print(f" DEALER SCORE: {dealer.score}")
+            print(f" {player.name.upper()}'S SCORE: {player.score}")
+            print()
+            time.sleep(0.8)
+            print(" It's a draw!")
+        elif player.score == 21:
+            time.sleep(2)
+            print()
+            print("  - - - - - - - - - - - - - - - - - - - - - -")
+            print()
+            print(" Revealing dealer card...")
+            print()
+            time.sleep(0.8)
+            dealer.show_hand()
+            player.show_hand()
+            print()
+            print(f" DEALER SCORE: {dealer.score}")
+            print(f" {player.name.upper()}'S SCORE: {player.score}")
+            print()
+            time.sleep(0.8)
             print(" You win!")
             player.total_wins += 1
         elif dealer.score == 21:
@@ -175,6 +200,16 @@ class GameRound:
             print()
             print("  - - - - - - - - - - - - - - - - - - - - - -")
             print()
+            print(" Revealing dealer card...")
+            print()
+            time.sleep(0.8)
+            dealer.show_hand()
+            player.show_hand()
+            print()
+            print(f" DEALER SCORE: {dealer.score}")
+            print(f" {player.name.upper()}'S SCORE: {player.score}")
+            print()
+            time.sleep(0.8)
             print(" Dealer wins!")
             dealer.total_wins += 1
         else:
@@ -184,6 +219,16 @@ class GameRound:
                 print()
                 print("  - - - - - - - - - - - - - - - - - - - - - -")
                 print()
+                print(" Revealing dealer card...")
+                print()
+                time.sleep(0.8)
+                dealer.show_hand()
+                player.show_hand()
+                print()
+                print(f" DEALER SCORE: {dealer.score}")
+                print(f" {player.name.upper()}'S SCORE: {player.score}")
+                print()
+                time.sleep(0.8)
                 print(" You win!")
                 player.total_wins += 1
             else:
