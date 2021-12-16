@@ -125,17 +125,13 @@ class Deck:
         print(f" {dealer.name.upper()}'S HAND: ['{dealer.hand[0]}', --------]")
         player.show_hand()
 
-    def player_hit(self, player, dealer):
+    def player_hit(self, player):
         popped_card = self.deck.pop()
         player.hand.append(popped_card)
-        print(f" {dealer.name.upper()}'S HAND: ['{dealer.hand[0]}', --------]")
-        player.show_hand()
 
-    def dealer_hit(self, player, dealer):
+    def dealer_hit(self, dealer):
         popped_card = self.deck.pop()
         dealer.hand.append(popped_card)
-        dealer.show_hand()
-        player.show_hand()
 
 
 class Card:
@@ -188,13 +184,7 @@ class GameRound:
             print("  - - - - - - - - - - - - - - - - - - - - - -")
             print()
             print(" Revealing dealer card...")
-            print()
-            time.sleep(0.8)
-            dealer.show_hand()
-            player.show_hand()
-            print()
-            print(f" DEALER SCORE: {dealer.score}")
-            print(f" {player.name.upper()}'S SCORE: {player.score}")
+            self.present_scores(player, dealer)
             print()
             time.sleep(0.8)
             print(" It's a draw!")
@@ -204,13 +194,7 @@ class GameRound:
             print("  - - - - - - - - - - - - - - - - - - - - - -")
             print()
             print(" Revealing dealer card...")
-            print()
-            time.sleep(0.8)
-            dealer.show_hand()
-            player.show_hand()
-            print()
-            print(f" DEALER SCORE: {dealer.score}")
-            print(f" {player.name.upper()}'S SCORE: {player.score}")
+            self.present_scores(player, dealer)
             print()
             time.sleep(0.8)
             print(" You win!")
@@ -221,13 +205,7 @@ class GameRound:
             print("  - - - - - - - - - - - - - - - - - - - - - -")
             print()
             print(" Revealing dealer card...")
-            print()
-            time.sleep(0.8)
-            dealer.show_hand()
-            player.show_hand()
-            print()
-            print(f" DEALER SCORE: {dealer.score}")
-            print(f" {player.name.upper()}'S SCORE: {player.score}")
+            self.present_scores(player, dealer)
             print()
             time.sleep(0.8)
             print(" Dealer wins!")
@@ -240,13 +218,7 @@ class GameRound:
                 print("  - - - - - - - - - - - - - - - - - - - - - -")
                 print()
                 print(" Revealing dealer card...")
-                print()
-                time.sleep(0.8)
-                dealer.show_hand()
-                player.show_hand()
-                print()
-                print(f" DEALER SCORE: {dealer.score}")
-                print(f" {player.name.upper()}'S SCORE: {player.score}")
+                self.present_scores(player, dealer)
                 print()
                 time.sleep(0.8)
                 print(" You win!")
@@ -301,13 +273,7 @@ class GameRound:
                         print("  - - - - - - - - - - - - - - - - - - - - - -")
                         print()
                         print(" Revealing dealer card...")
-                        print()
-                        time.sleep(0.8)
-                        dealer.show_hand()
-                        player.show_hand()
-                        print()
-                        print(f" DEALER SCORE: {dealer.score}")
-                        print(f" {player.name.upper()}'S SCORE: {player.score}")
+                        self.present_scores(player, dealer)
                         print()
                         print(" Dealer wins!")
                         dealer.total_wins += 1
@@ -336,7 +302,9 @@ class GameRound:
                 if (player_choice.lower() != "hit") and (player_choice.lower() != "stand"):
                     print(" Invalid input. Please only enter 'hit' or 'stand'.")
                 elif player_choice.lower() == "hit":
-                    self.deck.player_hit(player, dealer)
+                    self.deck.player_hit(player)
+                    print(f" {dealer.name.upper()}'S HAND: ['{dealer.hand[0]}', --------]")
+                    player.show_hand()
                     self.hand_values(dealer, player)
                     player.recalculate_ace_values()
                     self.hand_values(dealer, player)
@@ -356,24 +324,27 @@ class GameRound:
             print("  - - - - - - - - - - - - - - - - - - - - - -")
             print()
             print(" Dealer's turn.")
-            print()
-            time.sleep(0.8)
-            self.deck.dealer_hit(player, dealer)
+            self.deck.dealer_hit(dealer)
             self.hand_values(dealer, player)
             dealer.recalculate_ace_values()
             self.hand_values(dealer, player)
-
-            print()
-            time.sleep(0.8)
-
-            print(f" DEALER SCORE: {dealer.score}")
-            print(f" {player.name.upper()}'S SCORE: {player.score}")
+            self.present_scores(player, dealer)
 
     def present_scores_while_dealercard_hidden(self, player, dealer):
         print()
         time.sleep(0.8)
 
         print(f" DEALER SCORE: {dealer.hand[0].value} + ?")
+        print(f" {player.name.upper()}'S SCORE: {player.score}")
+
+    def present_scores(self, player, dealer):
+        print()
+        time.sleep(0.8)
+        dealer.show_hand()
+        player.show_hand()
+        print()
+        time.sleep(0.8)
+        print(f" DEALER SCORE: {dealer.score}")
         print(f" {player.name.upper()}'S SCORE: {player.score}")
 
 
