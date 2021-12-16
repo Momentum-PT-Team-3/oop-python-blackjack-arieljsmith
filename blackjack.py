@@ -9,6 +9,7 @@
 # hide dealer second card until it starts to hit
 
 # WISHLIST
+# ERROR: If dealer starts with an ace and a jack, for example, code won't recognize that it's at 21 before the dealer hits. Therefore, when the dealer *could* have won, they don't currently.
 # Break up GameRound __init__ into smaller functions where sensible
 # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
 # check that I'm not using more parameters than needed for my methods--prune where possible.
@@ -51,9 +52,6 @@ class Player:
     def __str__(self):
         return self.name
 
-    def hit(self, popped_card):
-        self.hand.append(popped_card)
-
     def show_hand(self):
         print(f" {self.name.upper()}'S HAND: ", [f"{card}" for card in self.hand])
 
@@ -94,13 +92,13 @@ class Deck:
 
     def player_hit(self, player, dealer):
         popped_card = self.deck.pop()
-        player.hit(popped_card)
+        player.hand.append(popped_card)
         print(f" {dealer.name.upper()}'S HAND: ['{dealer.hand[0]}', --------]")
         player.show_hand()
 
     def dealer_hit(self, player, dealer):
         popped_card = self.deck.pop()
-        dealer.hit(popped_card)
+        dealer.hand.append(popped_card)
         dealer.show_hand()
         player.show_hand()
 
