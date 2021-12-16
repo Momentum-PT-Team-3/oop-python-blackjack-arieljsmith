@@ -2,6 +2,8 @@
 # N O T E S
 # =============================================================================
 
+# UP NEXT: Try to remove recalculate_player_ace_value and recalculate_dealer_ace_value methods from GameRound and consolidate into a single method in Player class
+
 # DONE (OF WISHLIST ITEMS)
 # Formatting everything to look a bit better during gameplay
 # make dealer or player a subclass of the other
