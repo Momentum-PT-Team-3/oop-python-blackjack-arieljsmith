@@ -7,42 +7,23 @@ import time
 
 
 # =============================================================================
-# C O N S T A N T S
+# C O N S T A N T S ,  E T C .
 # =============================================================================
 
 SUITES = ["♦️ ", "♠️ ", "♣️ ", "♥️ "]
 PIPS = [2, 3, 4, 5, 6, 7, 8, 9, 10, "Jack", "Queen", "King", "Ace"]
+
+print()
+time.sleep(0.8)
 
 
 # =============================================================================
 # C L A S S E S
 # =============================================================================
 
-class Dealer:
-    def __init__(self):
-        self.hand = []
-
-    def __str__(self):
-        return "Dealer"
-
-    def deal(self, popped_cards):
-        for card in popped_cards:
-            self.hand.append(card)
-        self.show_dealer_hand()
-
-    def hit(self, popped_card):
-        self.hand.append(popped_card)
-
-    def show_dealer_hand(self):
-        print(" DEALER'S HAND: ", [f"{card}" for card in self.hand])
-
-    def reset_dealer_hand(self):
-        self.hand = []
-
-
 class Player:
-    def __init__(self):
-        self.name = input(" What is your name? ")
+    def __init__(self, name=input(" What is your name? ")):
+        self.name = name
         self.hand = []
 
     def __str__(self):
@@ -51,16 +32,21 @@ class Player:
     def deal(self, popped_cards):
         for card in popped_cards:
             self.hand.append(card)
-        self.show_player_hand()
+        self.show_hand()
 
     def hit(self, popped_card):
         self.hand.append(popped_card)
 
-    def show_player_hand(self):
-        print(" PLAYER'S HAND: ", [f"{card}" for card in self.hand])
+    def show_hand(self):
+        print(f" {self.name.upper()}'S HAND: ", [f"{card}" for card in self.hand])
 
-    def reset_player_hand(self):
+    def reset_hand(self):
         self.hand = []
+
+
+class Dealer(Player):
+    def __init__(self, name="Dealer"):
+        super().__init__(name)
 
 
 class Deck:
@@ -89,15 +75,15 @@ class Deck:
     def player_hit(self, player, dealer):
         popped_card = self.deck.pop()
         player.hit(popped_card)
-        dealer.show_dealer_hand()
-        player.show_player_hand()
+        dealer.show_hand()
+        player.show_hand()
         # self.show_cards()
 
     def dealer_hit(self, player, dealer):
         popped_card = self.deck.pop()
         dealer.hit(popped_card)
-        dealer.show_dealer_hand()
-        player.show_player_hand()
+        dealer.show_hand()
+        player.show_hand()
         # self.show_cards()
 
     def show_cards(self):
@@ -157,7 +143,7 @@ class GameRound:
         time.sleep(0.8)
 
         print(f" DEALER SCORE: {self.dealer_score}")
-        print(f" PLAYER SCORE: {self.player_score}")
+        print(f" {player.name.upper()}'S SCORE: {self.player_score}")
 
         while self.winner_declared is False:
             if self.player_score == 21:
@@ -251,7 +237,7 @@ class GameRound:
         for card in player.hand:
             if card.rank == "Ace":
                 if (card.value == 1) and (self.player_score + 10 <= 21):
-                    card.value = 11 
+                    card.value = 11
                     self.hand_values(dealer, player)
                 elif (card.value == 11) and (self.player_score > 21):
                     card.value = 1
@@ -261,11 +247,11 @@ class GameRound:
         for card in dealer.hand:
             if card.rank == "Ace":
                 if (card.rank == 1) and (self.dealer_score + 10 <= 21):
-                    card.rank = 11 
-                    hand_values(dealer, player)
+                    card.rank = 11
+                    self.hand_values(dealer, player)
                 elif (card.rank == 11) and (self.dealer_score > 21):
                     card.rank = 1
-                    hand_values(dealer, player)
+                    self.hand_values(dealer, player)
 
     def prompt_hit_or_stand(self, player, dealer):
         player_stand = False
@@ -289,7 +275,7 @@ class GameRound:
                     time.sleep(0.8)
 
                     print(f" DEALER SCORE: {self.dealer_score}")
-                    print(f" PLAYER SCORE: {self.player_score}")
+                    print(f" {player.name.upper()}'S SCORE: {self.player_score}")
                 else:
                     print(f" {player.name} has chosen to stand.")
                     player_stand = True
@@ -312,7 +298,7 @@ class GameRound:
             time.sleep(0.8)
 
             print(f" DEALER SCORE: {self.dealer_score}")
-            print(f" PLAYER SCORE: {self.player_score}")
+            print(f" {player.name.upper()}'S SCORE: {self.player_score}")
 
 
 class Game:
@@ -336,8 +322,8 @@ class Game:
         answer = input(" Would you like to play another round? y/n: ")
         if answer == "y":
             time.sleep(0.8)
-            self.player.reset_player_hand()
-            self.dealer.reset_dealer_hand()
+            self.player.reset_hand()
+            self.dealer.reset_hand()
             GameRound(self.player, self.dealer)
             self.check_end_condition()
         else:
@@ -352,11 +338,11 @@ class Game:
 # W H E R E  S H I R T  H A P P E N S
 # =============================================================================
 
-print()
 game = Game()
 game.start()
 
-# ON-DECK: Formatting everything to look a bit better during gameplay
+# DONE (OF WISHLIST ITEMS)
+# Formatting everything to look a bit better during gameplay
 
 # THINGS TO IMPLEMENT
 # Break up GameRound __init__ into smaller functions where sensible
@@ -364,5 +350,6 @@ game.start()
 # running tally of number of player wins and dealer wins
 # hide dealer second card until it starts to hit
 # check that I'm not using more parameters than needed for my methods--prune where possible.
+# make dealer or player a subclass of the other
 
 # PIE-IN-THE-SKY: Splitting! oooooo
