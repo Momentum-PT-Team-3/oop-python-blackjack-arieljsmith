@@ -25,6 +25,7 @@ class Player:
     def __init__(self, name=input(" What is your name? ")):
         self.name = name
         self.hand = []
+        self.total_wins = 0
 
     def __str__(self):
         return self.name
@@ -152,6 +153,7 @@ class GameRound:
                 print("  - - - - - - - - - - - - - - - - - - - - - -")
                 print()
                 print(" You win!")
+                player.total_wins += 1
                 self.winner_declared = True
             elif self.dealer_score == 21:
                 time.sleep(0.8)
@@ -159,6 +161,7 @@ class GameRound:
                 print("  - - - - - - - - - - - - - - - - - - - - - -")
                 print()
                 print(" Dealer wins!")
+                dealer.total_wins += 1
                 self.winner_declared = True
             else:
                 self.prompt_hit_or_stand(player, dealer)
@@ -168,6 +171,7 @@ class GameRound:
                     print("  - - - - - - - - - - - - - - - - - - - - - -")
                     print()
                     print(" You win!")
+                    player.total_wins += 1
                     self.winner_declared = True
                 else:
                     self.dealer_hit_loop(player, dealer)
@@ -177,6 +181,7 @@ class GameRound:
                         print("  - - - - - - - - - - - - - - - - - - - - - -")
                         print()
                         print(" Dealer wins!")
+                        dealer.total_wins += 1
                         self.winner_declared = True
                     elif self.dealer_score > 21:
                         if self.player_score < self.dealer_score:
@@ -185,6 +190,7 @@ class GameRound:
                             print("  - - - - - - - - - - - - - - - - - - - - - -")
                             print()
                             print(" You win!")
+                            player.total_wins += 1
                             self.winner_declared = True
                         elif self.player_score == self.dealer_score:
                             time.sleep(0.8)
@@ -199,6 +205,7 @@ class GameRound:
                             print("  - - - - - - - - - - - - - - - - - - - - - -")
                             print()
                             print(" Dealer wins!")
+                            dealer.total_wins += 1
                             self.winner_declared = True
                     else:
                         if 21 > self.player_score > self.dealer_score:
@@ -207,6 +214,7 @@ class GameRound:
                             print("  - - - - - - - - - - - - - - - - - - - - - -")
                             print()
                             print(" You win!")
+                            player.total_wins += 1
                             self.winner_declared = True
                         elif self.player_score == self.dealer_score:
                             time.sleep(0.8)
@@ -221,7 +229,14 @@ class GameRound:
                             print("  - - - - - - - - - - - - - - - - - - - - - -")
                             print()
                             print(" Dealer wins!")
+                            dealer.total_wins += 1
                             self.winner_declared = True
+        print()
+        time.sleep(0.8)
+        print(f" DEALER'S WINS: {dealer.total_wins}")
+        print(f" {player.name.upper()}'S WINS: {player.total_wins}")
+        print()
+        print("  - - - - - - - - - - - - - - - - - - - - - -")
 
     def hand_values(self, dealer, player):
         player_hand_values = []
@@ -343,13 +358,13 @@ game.start()
 
 # DONE (OF WISHLIST ITEMS)
 # Formatting everything to look a bit better during gameplay
+# make dealer or player a subclass of the other
+# running tally of number of player wins and dealer wins
 
 # THINGS TO IMPLEMENT
 # Break up GameRound __init__ into smaller functions where sensible
 # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
-# running tally of number of player wins and dealer wins
 # hide dealer second card until it starts to hit
 # check that I'm not using more parameters than needed for my methods--prune where possible.
-# make dealer or player a subclass of the other
 
 # PIE-IN-THE-SKY: Splitting! oooooo
