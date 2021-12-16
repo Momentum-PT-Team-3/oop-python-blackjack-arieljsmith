@@ -82,10 +82,8 @@ class Player:
             if card.rank == "Ace":
                 if (card.value == 1) and (self.score + 10 <= 21):
                     card.value = 11
-                    # self.hand_values(dealer, player) # NOTE: NOW NEED TO HANDLE THIS OUTSIDE OF THE FUNCTION WHEREVER IT'S CALLED
                 elif (card.value == 11) and (self.score > 21):
                     card.value = 1
-                    # self.hand_values(dealer, player) # NOTE: NOW NEED TO HANDLE THIS OUTSIDE OF THE FUNCTION WHEREVER IT'S CALLED
 
     def show_hand(self):
         print(f" {self.name.upper()}'S HAND: ", [f"{card}" for card in self.hand])
@@ -137,9 +135,6 @@ class Deck:
         dealer.show_hand()
         player.show_hand()
 
-    def show_cards(self):
-        print(" The cards in this deck include: ", [f"{card}" for card in self.deck])
-
 
 class Card:
     def __init__(self, suit, rank):
@@ -151,21 +146,6 @@ class Card:
         return f"{self.rank} of {self.suit}"
 
     def calculate_value(self, rank):
-        # value_dictionary = {
-        #     2: 2,
-        #     3: 3,
-        #     4: 4,
-        #     5: 5,
-        #     6: 6,
-        #     7: 7,
-        #     8: 8,
-        #     9: 9,
-        #     10: 10,
-        #     "Jack": 10,
-        #     "Queen": 10,
-        #     "King": 10,
-        #     "Ace": 1
-        # }
         card_value = VALUES[rank]
         return card_value
 
@@ -348,26 +328,6 @@ class GameRound:
             dealer_hand_values.append(card.value)
         player.score = sum(player_hand_values)
         dealer.score = sum(dealer_hand_values)
-
-    # def recalculate_player_ace_value(self, dealer, player):
-    #     for card in player.hand:
-    #         if card.rank == "Ace":
-    #             if (card.value == 1) and (player.score + 10 <= 21):
-    #                 card.value = 11
-    #                 self.hand_values(dealer, player)
-    #             elif (card.value == 11) and (player.score > 21):
-    #                 card.value = 1
-    #                 self.hand_values(dealer, player)
-
-    # def recalculate_dealer_ace_value(self, dealer, player):
-    #     for card in dealer.hand:
-    #         if card.rank == "Ace":
-    #             if (card.value == 1) and (dealer.score + 10 <= 21):
-    #                 card.value = 11
-    #                 self.hand_values(dealer, player)
-    #             elif (card.value == 11) and (dealer.score > 21):
-    #                 card.value = 1
-    #                 self.hand_values(dealer, player)
 
     def prompt_hit_or_stand(self, player, dealer):
         player_stand = False
