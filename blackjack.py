@@ -51,10 +51,6 @@ class Player:
     def __str__(self):
         return self.name
 
-    def deal(self, popped_cards):
-        for card in popped_cards:
-            self.hand.append(card)
-
     def hit(self, popped_card):
         self.hand.append(popped_card)
 
@@ -89,8 +85,10 @@ class Deck:
     def deal(self, dealer, player):
         dealer_tuple = (self.deck.pop(), self.deck.pop())
         player_tuple = (self.deck.pop(), self.deck.pop())
-        dealer.deal(dealer_tuple)
-        player.deal(player_tuple)
+        for card in dealer_tuple:
+            dealer.hand.append(card)
+        for card in player_tuple:
+            player.hand.append(card)
         print(f" {dealer.name.upper()}'S HAND: ['{dealer.hand[0]}', --------]")
         player.show_hand()
 
