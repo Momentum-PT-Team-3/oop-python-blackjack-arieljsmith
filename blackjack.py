@@ -14,6 +14,7 @@
 # IMPROVEMENT: If player stands and dealer wins without making a move, we currently don't see the dealer's hand or score. This would be nice to know.
 
 # WISHLIST
+# Make value_dictionary a global constant
 # Break up GameRound __init__ into smaller functions where sensible
     # SUB-WISH: Create formatting method to gather all the dividing lines and empty lines, maybe even the pauses, etc.
 # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
@@ -146,7 +147,7 @@ class GameRound:
         self.play_a_round(player, dealer)
 
     def __str__(self):
-        return "Ceci n'est pas une Game."
+        return "Ceci n'est pas une Game. (Ou est-ce?)"
 
     def play_a_round(self, player, dealer): # might need to add player, dealer...but let's see!
         print()
