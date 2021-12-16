@@ -16,13 +16,14 @@
     # IMPROVEMENT: If player stands and dealer wins without making a move, we currently don't see the dealer's hand or score. This would be nice to know.
     # Make value_dictionary a global constant
     # Remove recalculate_player_ace_value and recalculate_dealer_ace_value methods from GameRound and consolidate into a single method in Player class
+    # Bundle functionality of the calculate_value method in the Card class instead with the build method in the Deck class
 
 # WISHLIST
-    # Consider bundling the functionality of the calculate_value method in the Card class instead with the build method in the Deck class
     # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
     # check that I'm not using more parameters than needed for my methods--prune where possible.
     # Docstrings! Doc! Strings!
     # Keep same deck through multiple rounds until it's empty, then create new deck.
+    # BUG: After player busted (24), the dealer hit, resulting in a 20. After this it went immediately into "Revealing dealer card..."--this should not be necessary as the dealer's cards were already revealed. Either I need to reword this, or need to rethink the logic surrounding it.
     # Make any mentions of a card's pips, suits, ranks, values, etc. consistent (i.e. in some areas the card's pip is referred to as its rank, which is wording I started out using but moved on from midway through)
 
 # LONG-TERM:
@@ -108,7 +109,8 @@ class Deck:
         deck = []
         for suit in suits:
             for rank in ranks:
-                card = Card(suit, rank)
+                card_value = VALUES[rank]
+                card = Card(suit, rank, card_value)
                 deck.append(card)
         random.shuffle(deck)
         return deck
@@ -137,17 +139,13 @@ class Deck:
 
 
 class Card:
-    def __init__(self, suit, rank):
+    def __init__(self, suit, rank, value):
         self.suit = suit
         self.rank = rank
-        self.value = self.calculate_value(self.rank)
+        self.value = value
 
     def __str__(self):
         return f"{self.rank} of {self.suit}"
-
-    def calculate_value(self, rank):
-        card_value = VALUES[rank]
-        return card_value
 
 
 class GameRound:
