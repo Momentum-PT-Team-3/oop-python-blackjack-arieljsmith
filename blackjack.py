@@ -361,7 +361,7 @@ game.start()
 # make dealer or player a subclass of the other
 # running tally of number of player wins and dealer wins
 
-# THINGS TO IMPLEMENT
+# WISHLIST
 # Break up GameRound __init__ into smaller functions where sensible
 # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
 # hide dealer second card until it starts to hit
