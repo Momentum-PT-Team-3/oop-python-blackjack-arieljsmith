@@ -21,6 +21,7 @@
 # check that I'm not using more parameters than needed for my methods--prune where possible.
 # Docstrings! Doc! Strings!
 # Keep same deck through multiple rounds until it's empty, then create new deck.
+# Make any mentions of a card's pips, suits, ranks, values, etc. consistent (i.e. in some areas the card's pip is referred to as its rank, which is wording I started out using but moved on from midway through)
 
 # PIE-IN-THE-SKY: Splitting! oooooo
 
@@ -149,7 +150,7 @@ class GameRound:
     def __str__(self):
         return "Ceci n'est pas une Game. (Ou est-ce?)"
 
-    def play_a_round(self, player, dealer): # might need to add player, dealer...but let's see!
+    def play_a_round(self, player, dealer):
         print()
         print(" ============================================")
         print(" ============================================")
