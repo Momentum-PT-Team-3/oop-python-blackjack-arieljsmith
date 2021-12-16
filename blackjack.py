@@ -284,10 +284,19 @@ class GameRound:
                     self.deck.player_hit(player, dealer)
                     self.hand_values(dealer, player)
                     self.recalculate_player_ace_value(dealer, player)
-                else:
+
                     print()
-                    print(" Player has chosen to stand.")
+                    time.sleep(0.8)
+
+                    print(f" DEALER SCORE: {self.dealer_score}")
+                    print(f" PLAYER SCORE: {self.player_score}")
+                else:
+                    print(f" {player.name} has chosen to stand.")
                     player_stand = True
+            if self.player_score > 21:
+                print()
+                time.sleep(0.8)
+                print(f" {player.name} has busted.")
 
     def dealer_hit_loop(self, player, dealer):
         while self.dealer_score < 17:
@@ -298,6 +307,12 @@ class GameRound:
             self.deck.dealer_hit(player, dealer)
             self.hand_values(dealer, player)
             self.recalculate_dealer_ace_value(dealer, player)
+
+            print()
+            time.sleep(0.8)
+
+            print(f" DEALER SCORE: {self.dealer_score}")
+            print(f" PLAYER SCORE: {self.player_score}")
 
 
 class Game:
@@ -316,14 +331,20 @@ class Game:
             self.check_end_condition()
 
     def check_end_condition(self):
+        print()
+        time.sleep(0.8)
         answer = input(" Would you like to play another round? y/n: ")
         if answer == "y":
+            time.sleep(0.8)
             self.player.reset_player_hand()
             self.dealer.reset_dealer_hand()
             GameRound(self.player, self.dealer)
             self.check_end_condition()
         else:
+            time.sleep(0.8)
+            print()
             print(" Thank you for playing!")
+            time.sleep(0.8)
             self.end_game = True
 
 
