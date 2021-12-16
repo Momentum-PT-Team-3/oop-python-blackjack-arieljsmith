@@ -142,7 +142,12 @@ class Card:
 class GameRound:
     def __init__(self, player, dealer):
         self.deck = Deck()
+        self.play_a_round(player, dealer)
 
+    def __str__(self):
+        return "Ceci n'est pas une Game."
+
+    def play_a_round(self, player, dealer): # might need to add player, dealer...but let's see!
         print()
         print(" ============================================")
         print(" ============================================")
@@ -162,6 +167,16 @@ class GameRound:
         print(f" DEALER SCORE: {dealer.hand[0].value} + ?")
         print(f" {player.name.upper()}'S SCORE: {player.score}")
 
+        self.determine_winner(dealer, player)
+
+        print()
+        time.sleep(0.8)
+        print(f" DEALER'S WINS: {dealer.total_wins}")
+        print(f" {player.name.upper()}'S WINS: {player.total_wins}")
+        print()
+        print("  - - - - - - - - - - - - - - - - - - - - - -")
+
+    def determine_winner(self, dealer, player):
         if player.score == 21 and dealer.score == 21:
             time.sleep(2)
             print()
@@ -280,17 +295,17 @@ class GameRound:
                         print()
                         print("  - - - - - - - - - - - - - - - - - - - - - -")
                         print()
+                        print(" Revealing dealer card...")
+                        print()
+                        time.sleep(0.8)
+                        dealer.show_hand()
+                        player.show_hand()
+                        print()
+                        print(f" DEALER SCORE: {dealer.score}")
+                        print(f" {player.name.upper()}'S SCORE: {player.score}")
+                        print()
                         print(" Dealer wins!")
                         dealer.total_wins += 1
-        print()
-        time.sleep(0.8)
-        print(f" DEALER'S WINS: {dealer.total_wins}")
-        print(f" {player.name.upper()}'S WINS: {player.total_wins}")
-        print()
-        print("  - - - - - - - - - - - - - - - - - - - - - -")
-
-    def __str__(self):
-        return "Ceci n'est pas une Game."
 
     def hand_values(self, dealer, player):
         player_hand_values = []
