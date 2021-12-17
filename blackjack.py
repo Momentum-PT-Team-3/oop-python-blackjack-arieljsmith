@@ -139,6 +139,10 @@ class Deck:
         return str(self.deck)
 
     def build(self, suits, pips):
+        """
+        Populates the deck with cards while simultaneously creating all card
+        instances, then shuffles the deck.
+        """
         deck = []
         for suit in suits:
             for pip in pips:
@@ -149,6 +153,11 @@ class Deck:
         return deck
 
     def deal(self, dealer, player):
+        """
+        Pops four cards from the deck and places 2 each in the dealer's and
+        player's hands, then prints the contents of both hands, excluding the
+        dealer's second card.
+        """
         dealer_tuple = (self.deck.pop(), self.deck.pop())
         player_tuple = (self.deck.pop(), self.deck.pop())
         for card in dealer_tuple:
@@ -159,6 +168,10 @@ class Deck:
         player.show_hand()
 
     def hit(self, player_or_dealer):
+        """
+        Pops a card from the deck and adds that card to the hand of whoever has
+        hit.
+        """
         popped_card = self.deck.pop()
         player_or_dealer.hand.append(popped_card)
 
