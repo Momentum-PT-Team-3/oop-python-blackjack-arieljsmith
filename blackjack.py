@@ -127,13 +127,9 @@ class Deck:
         print(f" {dealer.name.upper()}'S HAND: ['{dealer.hand[0]}', --------]")
         player.show_hand()
 
-    def player_hit(self, player):
+    def hit(self, player_or_dealer):
         popped_card = self.deck.pop()
-        player.hand.append(popped_card)
-
-    def dealer_hit(self, dealer):
-        popped_card = self.deck.pop()
-        dealer.hand.append(popped_card)
+        player_or_dealer.hand.append(popped_card)
 
 
 class Card:
@@ -243,12 +239,12 @@ class GameRound:
             while (player.score < 21) and (player_stand is False):
                 print()
                 time.sleep(0.8)
-                player_choice = input(" Hit or stand? ")
+                player_choice = input(" Would you like to hit? y/n: ")
                 self.print_divider_split_sec_pause()
-                if (player_choice.lower() != "hit") and (player_choice.lower() != "stand"):
-                    print(" Invalid input. Please only enter 'hit' or 'stand'.")
-                elif player_choice.lower() == "hit":
-                    self.deck.player_hit(player)
+                if (player_choice.lower() != "y") and (player_choice.lower() != "n"):
+                    print(" Invalid input. Please only enter 'y' or 'n'.")
+                elif player_choice.lower() == "y":
+                    self.deck.hit(player)
                     print(f" {dealer.name.upper()}'S HAND: ['{dealer.hand[0]}', --------]")
                     player.show_hand()
                     player.recalculate_ace_values(self, dealer, player)
@@ -265,7 +261,7 @@ class GameRound:
         while dealer.score < 17:
             self.print_divider_two_sec_pause()
             print(" Dealer's turn.")
-            self.deck.dealer_hit(dealer)
+            self.deck.hit(dealer)
             dealer.recalculate_ace_values(self, dealer, player)
             self.present_scores(player, dealer)
             self.dealer_card_reveal = True
