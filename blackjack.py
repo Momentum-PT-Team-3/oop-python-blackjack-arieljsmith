@@ -21,9 +21,9 @@
     # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
     # check that I'm not using more parameters than needed for my methods--prune where possible.
     # Make any mentions of a card's pips, suits, ranks, values, etc. consistent (i.e. in some areas the card's pip is referred to as its rank, which is wording I started out using but moved on from midway through)
-
-# WISHLIST
     # Docstrings! Doc! Strings!
+    
+# WISHLIST
     # Keep same deck through multiple rounds until it's empty, then create new deck.
 
 # LONG-TERM:
@@ -443,6 +443,10 @@ class Game:
         return f"PLAYER HAS EXPRESSED DESIRE TO END THE GAME: {self.end_game}"
 
     def start(self):
+        """
+        Greets the player. For as long as the player hasn't opted to end the
+        game, run the game, then check to see if the player wants to end the game.
+        """
         print()
         time.sleep(0.5)
         print(f" Hello, {self.player.name}.")
@@ -452,6 +456,13 @@ class Game:
             self.check_end_condition()
 
     def check_end_condition(self):
+        """
+        Prompt the player as to whether or not they want to play another round.
+        If they enter invalid input, tell them so. Otherwise if they want to
+        play another round, play another round, then check condition again
+        (recursive). If they don't, thank them for playing, then change the
+        end_game attribute to True.
+        """
         time.sleep(0.8)
         valid_answer = False
         while valid_answer is False:
