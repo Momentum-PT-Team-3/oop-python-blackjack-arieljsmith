@@ -87,6 +87,12 @@ class Player:
         return self.name
 
     def recalculate_ace_values(self, game, dealer, player):
+        """
+        Calculates the current total value of each hand via game.hand_values,
+        then for each ace in the hand, determines whether the ace's value
+        should equal 1 or 11 at that given point in the game. Once determined
+        and updated, the total value of each hand is recalculated
+        """
         game.hand_values(dealer, player)
         for card in self.hand:
             if card.pip == "Ace":
@@ -97,9 +103,15 @@ class Player:
         game.hand_values(dealer, player)
 
     def show_hand(self):
+        """
+        Prints the contents of the instance's hand.
+        """
         print(f" {self.name.upper()}'S HAND: ", [f"{card}" for card in self.hand])
 
     def reset_hand(self):
+        """
+        Resets the hand to an empty list.
+        """
         self.hand = []
 
 
