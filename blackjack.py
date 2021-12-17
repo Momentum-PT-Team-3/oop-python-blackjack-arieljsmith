@@ -18,13 +18,13 @@
     # Remove recalculate_player_ace_value and recalculate_dealer_ace_value methods from GameRound and consolidate into a single method in Player class
     # Bundle functionality of the calculate_value method in the Card class instead with the build method in the Deck class
     # SOLVEDBUG: After player busted (24), the dealer hit, resulting in a 20. After this it went immediately into "Revealing dealer card..."--this should not be necessary as the dealer's cards were already revealed. Either I need to reword this, or need to rethink the logic surrounding it.
-
-# WISHLIST
     # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
     # check that I'm not using more parameters than needed for my methods--prune where possible.
+    # Make any mentions of a card's pips, suits, ranks, values, etc. consistent (i.e. in some areas the card's pip is referred to as its rank, which is wording I started out using but moved on from midway through)
+
+# WISHLIST
     # Docstrings! Doc! Strings!
     # Keep same deck through multiple rounds until it's empty, then create new deck.
-    # Make any mentions of a card's pips, suits, ranks, values, etc. consistent (i.e. in some areas the card's pip is referred to as its rank, which is wording I started out using but moved on from midway through)
 
 # LONG-TERM:
     # Splitting! oooooo
@@ -42,7 +42,7 @@ import time
 # C O N S T A N T S ,  E T C .
 # =============================================================================
 
-SUITES = ["♦️ ", "♠️ ", "♣️ ", "♥️ "]
+SUITS = ["♦️ ", "♠️ ", "♣️ ", "♥️ "]
 PIPS = [2, 3, 4, 5, 6, 7, 8, 9, 10, "Jack", "Queen", "King", "Ace"]
 VALUES = {
     2: 2,
@@ -81,7 +81,7 @@ class Player:
     def recalculate_ace_values(self, game, dealer, player):
         game.hand_values(dealer, player)
         for card in self.hand:
-            if card.rank == "Ace":
+            if card.pip == "Ace":
                 if (card.value == 1) and (self.score + 10 <= 21):
                     card.value = 11
                 elif (card.value == 11) and (self.score > 21):
@@ -102,17 +102,17 @@ class Dealer(Player):
 
 class Deck:
     def __init__(self):
-        self.deck = self.build(SUITES, PIPS)
+        self.deck = self.build(SUITS, PIPS)
 
     def __str__(self):
         return str(self.deck)
 
-    def build(self, suits, ranks):
+    def build(self, suits, pips):
         deck = []
         for suit in suits:
-            for rank in ranks:
-                card_value = VALUES[rank]
-                card = Card(suit, rank, card_value)
+            for pip in pips:
+                card_value = VALUES[pip]
+                card = Card(suit, pip, card_value)
                 deck.append(card)
         random.shuffle(deck)
         return deck
@@ -133,13 +133,13 @@ class Deck:
 
 
 class Card:
-    def __init__(self, suit, rank, value):
+    def __init__(self, suit, pip, value):
         self.suit = suit
-        self.rank = rank
+        self.pip = pip
         self.value = value
 
     def __str__(self):
-        return f"{self.rank} of {self.suit}"
+        return f"{self.pip} of {self.suit}"
 
 
 class GameRound:
