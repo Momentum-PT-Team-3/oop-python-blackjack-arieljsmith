@@ -17,13 +17,13 @@
     # Make value_dictionary a global constant
     # Remove recalculate_player_ace_value and recalculate_dealer_ace_value methods from GameRound and consolidate into a single method in Player class
     # Bundle functionality of the calculate_value method in the Card class instead with the build method in the Deck class
+    # SOLVEDBUG: After player busted (24), the dealer hit, resulting in a 20. After this it went immediately into "Revealing dealer card..."--this should not be necessary as the dealer's cards were already revealed. Either I need to reword this, or need to rethink the logic surrounding it.
 
 # WISHLIST
     # Rearrange attributes and methods so they're in more sensible classes (a lot got dumped into GameRound) (i.e. is a method being done to a class? Then it should be within the class it's being done to.)
     # check that I'm not using more parameters than needed for my methods--prune where possible.
     # Docstrings! Doc! Strings!
     # Keep same deck through multiple rounds until it's empty, then create new deck.
-    # BUG: After player busted (24), the dealer hit, resulting in a 20. After this it went immediately into "Revealing dealer card..."--this should not be necessary as the dealer's cards were already revealed. Either I need to reword this, or need to rethink the logic surrounding it.
     # Make any mentions of a card's pips, suits, ranks, values, etc. consistent (i.e. in some areas the card's pip is referred to as its rank, which is wording I started out using but moved on from midway through)
 
 # LONG-TERM:
@@ -147,6 +147,8 @@ class Card:
 class GameRound:
     def __init__(self, player, dealer):
         self.deck = Deck()
+        self.dealer_card_reveal = False
+
         self.play_a_round(player, dealer)
 
     def __str__(self):
@@ -179,14 +181,14 @@ class GameRound:
     def determine_winner(self, dealer, player):
         if player.score == 21 and dealer.score == 21:
             self.print_divider_two_sec_pause()
-            print(" Revealing dealer card...")
+            self.check_dealer_card_reveal()
             self.present_scores(player, dealer)
             print()
             time.sleep(0.8)
             print(" It's a draw!")
         elif player.score == 21:
             self.print_divider_two_sec_pause()
-            print(" Revealing dealer card...")
+            self.check_dealer_card_reveal()
             self.present_scores(player, dealer)
             print()
             time.sleep(0.8)
@@ -194,7 +196,7 @@ class GameRound:
             player.total_wins += 1
         elif dealer.score == 21:
             self.print_divider_two_sec_pause()
-            print(" Revealing dealer card...")
+            self.check_dealer_card_reveal()
             self.present_scores(player, dealer)
             print()
             time.sleep(0.8)
@@ -204,7 +206,7 @@ class GameRound:
             self.prompt_hit_or_stand(player, dealer)
             if player.score == 21:
                 self.print_divider_two_sec_pause()
-                print(" Revealing dealer card...")
+                self.check_dealer_card_reveal()
                 self.present_scores(player, dealer)
                 print()
                 time.sleep(0.8)
@@ -237,7 +239,7 @@ class GameRound:
                         print(" It's a draw!")
                     else:
                         self.print_divider_two_sec_pause()
-                        print(" Revealing dealer card...")
+                        self.check_dealer_card_reveal()
                         self.present_scores(player, dealer)
                         print()
                         print(" Dealer wins!")
@@ -288,6 +290,7 @@ class GameRound:
             dealer.recalculate_ace_values()
             self.hand_values(dealer, player)
             self.present_scores(player, dealer)
+            self.dealer_card_reveal = True
 
     def present_scores_while_dealercard_hidden(self, player, dealer):
         print()
@@ -317,6 +320,10 @@ class GameRound:
         print()
         print(" - - - - - - - - - - - - - - - - - - - - - -")
         print()
+
+    def check_dealer_card_reveal(self):
+        if self.dealer_card_reveal is not True:
+            print(" Revealing dealer card...")
 
 
 class Game:
