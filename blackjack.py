@@ -181,23 +181,23 @@ class GameRound:
     def determine_winner(self, dealer, player):
         if player.score == 21 and dealer.score == 21:
             self.print_divider_two_sec_pause()
-            self.check_dealer_card_reveal()
-            self.present_scores(player, dealer)
+            self.check_dealer_card_reveal(player, dealer)
+            # self.present_scores(player, dealer)
             print()
             time.sleep(0.8)
             print(" It's a draw!")
         elif player.score == 21:
             self.print_divider_two_sec_pause()
-            self.check_dealer_card_reveal()
-            self.present_scores(player, dealer)
+            self.check_dealer_card_reveal(player, dealer)
+            # self.present_scores(player, dealer)
             print()
             time.sleep(0.8)
             print(" You win!")
             player.total_wins += 1
         elif dealer.score == 21:
             self.print_divider_two_sec_pause()
-            self.check_dealer_card_reveal()
-            self.present_scores(player, dealer)
+            self.check_dealer_card_reveal(player, dealer)
+            # self.present_scores(player, dealer)
             print()
             time.sleep(0.8)
             print(" Dealer wins!")
@@ -206,8 +206,8 @@ class GameRound:
             self.prompt_hit_or_stand(player, dealer)
             if player.score == 21:
                 self.print_divider_two_sec_pause()
-                self.check_dealer_card_reveal()
-                self.present_scores(player, dealer)
+                self.check_dealer_card_reveal(player, dealer)
+                # self.present_scores(player, dealer)
                 print()
                 time.sleep(0.8)
                 print(" You win!")
@@ -216,31 +216,43 @@ class GameRound:
                 self.dealer_hit_loop(player, dealer)
                 if dealer.score == 21:
                     self.print_divider_two_sec_pause()
+                    self.check_dealer_card_reveal(player, dealer)
+                    # self.present_scores(player, dealer)
                     print(" Dealer wins!")
                     dealer.total_wins += 1
                 elif dealer.score > 21:
                     if player.score < dealer.score:
                         self.print_divider_two_sec_pause()
+                        self.check_dealer_card_reveal(player, dealer)
+                        # self.present_scores(player, dealer)
                         print(" You win!")
                         player.total_wins += 1
                     elif player.score == dealer.score:
                         self.print_divider_two_sec_pause()
+                        self.check_dealer_card_reveal(player, dealer)
+                        # self.present_scores(player, dealer)
                         print(" It's a draw!")
                     else:
                         self.print_divider_two_sec_pause()
+                        self.check_dealer_card_reveal(player, dealer)
+                        # self.present_scores(player, dealer)
                         dealer.total_wins += 1
                 else:
                     if 21 > player.score > dealer.score:
                         self.print_divider_two_sec_pause()
+                        self.check_dealer_card_reveal(player, dealer)
+                        # self.present_scores(player, dealer)
                         print(" You win!")
                         player.total_wins += 1
                     elif player.score == dealer.score:
                         self.print_divider_two_sec_pause()
+                        self.check_dealer_card_reveal(player, dealer)
+                        # self.present_scores(player, dealer)
                         print(" It's a draw!")
                     else:
                         self.print_divider_two_sec_pause()
-                        self.check_dealer_card_reveal()
-                        self.present_scores(player, dealer)
+                        self.check_dealer_card_reveal(player, dealer)
+                        # self.present_scores(player, dealer)
                         print()
                         print(" Dealer wins!")
                         dealer.total_wins += 1
@@ -321,9 +333,10 @@ class GameRound:
         print(" - - - - - - - - - - - - - - - - - - - - - -")
         print()
 
-    def check_dealer_card_reveal(self):
+    def check_dealer_card_reveal(self, player, dealer):
         if self.dealer_card_reveal is not True:
             print(" Revealing dealer card...")
+            self.present_scores(player, dealer)
 
 
 class Game:
