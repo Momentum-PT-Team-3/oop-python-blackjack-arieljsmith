@@ -174,25 +174,18 @@ class GameRound:
         time.sleep(0.8)
         print(f" DEALER'S WINS: {dealer.total_wins}")
         print(f" {player.name.upper()}'S WINS: {player.total_wins}")
-        print()
-        print("  - - - - - - - - - - - - - - - - - - - - - -")
+        self.print_divider_split_sec_pause()
 
     def determine_winner(self, dealer, player):
         if player.score == 21 and dealer.score == 21:
-            time.sleep(2)
-            print()
-            print("  - - - - - - - - - - - - - - - - - - - - - -")
-            print()
+            self.print_divider_two_sec_pause()
             print(" Revealing dealer card...")
             self.present_scores(player, dealer)
             print()
             time.sleep(0.8)
             print(" It's a draw!")
         elif player.score == 21:
-            time.sleep(2)
-            print()
-            print("  - - - - - - - - - - - - - - - - - - - - - -")
-            print()
+            self.print_divider_two_sec_pause()
             print(" Revealing dealer card...")
             self.present_scores(player, dealer)
             print()
@@ -200,10 +193,7 @@ class GameRound:
             print(" You win!")
             player.total_wins += 1
         elif dealer.score == 21:
-            time.sleep(2)
-            print()
-            print("  - - - - - - - - - - - - - - - - - - - - - -")
-            print()
+            self.print_divider_two_sec_pause()
             print(" Revealing dealer card...")
             self.present_scores(player, dealer)
             print()
@@ -213,10 +203,7 @@ class GameRound:
         else:
             self.prompt_hit_or_stand(player, dealer)
             if player.score == 21:
-                time.sleep(2)
-                print()
-                print("  - - - - - - - - - - - - - - - - - - - - - -")
-                print()
+                self.print_divider_two_sec_pause()
                 print(" Revealing dealer card...")
                 self.present_scores(player, dealer)
                 print()
@@ -226,52 +213,30 @@ class GameRound:
             else:
                 self.dealer_hit_loop(player, dealer)
                 if dealer.score == 21:
-                    time.sleep(2)
-                    print()
-                    print("  - - - - - - - - - - - - - - - - - - - - - -")
-                    print()
+                    self.print_divider_two_sec_pause()
                     print(" Dealer wins!")
                     dealer.total_wins += 1
                 elif dealer.score > 21:
                     if player.score < dealer.score:
-                        time.sleep(2)
-                        print()
-                        print("  - - - - - - - - - - - - - - - - - - - - - -")
-                        print()
+                        self.print_divider_two_sec_pause()
                         print(" You win!")
                         player.total_wins += 1
                     elif player.score == dealer.score:
-                        time.sleep(2)
-                        print()
-                        print("  - - - - - - - - - - - - - - - - - - - - - -")
-                        print()
+                        self.print_divider_two_sec_pause()
                         print(" It's a draw!")
                     else:
-                        time.sleep(2)
-                        print()
-                        print("  - - - - - - - - - - - - - - - - - - - - - -")
-                        print()
-                        print(" Dealer wins!")
+                        self.print_divider_two_sec_pause()
                         dealer.total_wins += 1
                 else:
                     if 21 > player.score > dealer.score:
-                        time.sleep(2)
-                        print()
-                        print("  - - - - - - - - - - - - - - - - - - - - - -")
-                        print()
+                        self.print_divider_two_sec_pause()
                         print(" You win!")
                         player.total_wins += 1
                     elif player.score == dealer.score:
-                        time.sleep(2)
-                        print()
-                        print("  - - - - - - - - - - - - - - - - - - - - - -")
-                        print()
+                        self.print_divider_two_sec_pause()
                         print(" It's a draw!")
                     else:
-                        time.sleep(2)
-                        print()
-                        print("  - - - - - - - - - - - - - - - - - - - - - -")
-                        print()
+                        self.print_divider_two_sec_pause()
                         print(" Revealing dealer card...")
                         self.present_scores(player, dealer)
                         print()
@@ -295,10 +260,7 @@ class GameRound:
                 print()
                 time.sleep(0.8)
                 player_choice = input(" Hit or stand? ")
-                time.sleep(0.8)
-                print()
-                print("  - - - - - - - - - - - - - - - - - - - - - -")
-                print()
+                self.print_divider_split_sec_pause()
                 if (player_choice.lower() != "hit") and (player_choice.lower() != "stand"):
                     print(" Invalid input. Please only enter 'hit' or 'stand'.")
                 elif player_choice.lower() == "hit":
@@ -319,10 +281,7 @@ class GameRound:
 
     def dealer_hit_loop(self, player, dealer):
         while dealer.score < 17:
-            print()
-            time.sleep(2)
-            print("  - - - - - - - - - - - - - - - - - - - - - -")
-            print()
+            self.print_divider_two_sec_pause()
             print(" Dealer's turn.")
             self.deck.dealer_hit(dealer)
             self.hand_values(dealer, player)
@@ -347,6 +306,18 @@ class GameRound:
         print(f" DEALER SCORE: {dealer.score}")
         print(f" {player.name.upper()}'S SCORE: {player.score}")
 
+    def print_divider_two_sec_pause(self):
+        time.sleep(2)
+        print()
+        print(" - - - - - - - - - - - - - - - - - - - - - -")
+        print()
+
+    def print_divider_split_sec_pause(self):
+        time.sleep(0.8)
+        print()
+        print(" - - - - - - - - - - - - - - - - - - - - - -")
+        print()
+
 
 class Game:
     def __init__(self):
@@ -367,9 +338,18 @@ class Game:
             self.check_end_condition()
 
     def check_end_condition(self):
-        print()
         time.sleep(0.8)
-        answer = input(" Would you like to play another round? y/n: ")
+        valid_answer = False
+        while valid_answer is False:
+            answer = input(" Would you like to play another round? y/n: ")
+            if answer.lower() == "y" or answer.lower() == "n":
+                valid_answer = True
+            else:
+                time.sleep(0.8)
+                print()
+                print(" Invalid input. Please only enter 'y' or 'n'.")
+                print()
+                time.sleep(0.8)
         if answer == "y":
             time.sleep(0.8)
             self.player.reset_hand()
