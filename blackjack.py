@@ -3,8 +3,7 @@
 # =============================================================================
 
 # ON DECK:
-    # Break up GameRound __init__ into smaller functions where sensible
-        # SUB-WISH: Create formatting method to gather all the dividing lines and empty lines, maybe even the pauses, etc.
+    # Keep same deck through multiple rounds until it's empty, then create new deck.
 
 # COMPLETE (OF WISHLIST ITEMS):
     # Formatting everything to look a bit better during gameplay
@@ -22,7 +21,9 @@
     # check that I'm not using more parameters than needed for my methods--prune where possible.
     # Make any mentions of a card's pips, suits, ranks, values, etc. consistent (i.e. in some areas the card's pip is referred to as its rank, which is wording I started out using but moved on from midway through)
     # Docstrings! Doc! Strings!
-    
+    # Break up GameRound __init__ into smaller functions where sensible
+        # SUB-WISH: Create formatting method to gather all the dividing lines and empty lines, maybe even the pauses, etc.
+
 # WISHLIST
     # Keep same deck through multiple rounds until it's empty, then create new deck.
 
