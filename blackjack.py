@@ -78,13 +78,15 @@ class Player:
     def __str__(self):
         return self.name
 
-    def recalculate_ace_values(self):
+    def recalculate_ace_values(self, game, dealer, player):
+        game.hand_values(dealer, player)
         for card in self.hand:
             if card.rank == "Ace":
                 if (card.value == 1) and (self.score + 10 <= 21):
                     card.value = 11
                 elif (card.value == 11) and (self.score > 21):
                     card.value = 1
+        game.hand_values(dealer, player)
 
     def show_hand(self):
         print(f" {self.name.upper()}'S HAND: ", [f"{card}" for card in self.hand])
@@ -164,10 +166,8 @@ class GameRound:
         time.sleep(1)
 
         self.deck.deal(dealer, player)
-        self.hand_values(dealer, player)
-        dealer.recalculate_ace_values()
-        player.recalculate_ace_values()
-        self.hand_values(dealer, player)
+        dealer.recalculate_ace_values(self, dealer, player)
+        player.recalculate_ace_values(self, dealer, player)
         self.present_scores_while_dealercard_hidden(player, dealer)
 
         self.determine_winner(dealer, player)
@@ -213,6 +213,7 @@ class GameRound:
                     else:
                         self.final_score_display(player, dealer)
                         dealer.total_wins += 1
+                        print(" Dealer wins!")
                 else:
                     if 21 > player.score > dealer.score:
                         self.final_score_display(player, dealer)
@@ -250,9 +251,7 @@ class GameRound:
                     self.deck.player_hit(player)
                     print(f" {dealer.name.upper()}'S HAND: ['{dealer.hand[0]}', --------]")
                     player.show_hand()
-                    self.hand_values(dealer, player)
-                    player.recalculate_ace_values()
-                    self.hand_values(dealer, player)
+                    player.recalculate_ace_values(self, dealer, player)
                     self.present_scores_while_dealercard_hidden(player, dealer)
                 else:
                     print(f" {player.name} has chosen to stand.")
@@ -267,9 +266,7 @@ class GameRound:
             self.print_divider_two_sec_pause()
             print(" Dealer's turn.")
             self.deck.dealer_hit(dealer)
-            self.hand_values(dealer, player)
-            dealer.recalculate_ace_values()
-            self.hand_values(dealer, player)
+            dealer.recalculate_ace_values(self, dealer, player)
             self.present_scores(player, dealer)
             self.dealer_card_reveal = True
 
@@ -289,6 +286,8 @@ class GameRound:
         time.sleep(0.8)
         print(f" DEALER SCORE: {dealer.score}")
         print(f" {player.name.upper()}'S SCORE: {player.score}")
+        print()
+        time.sleep(0.8)
 
     def print_divider_two_sec_pause(self):
         time.sleep(2)
