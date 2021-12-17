@@ -70,6 +70,10 @@ time.sleep(0.8)
 
 class Player:
     def __init__(self, name=input(" What is your name? ")):
+        """
+        Creates instance of Player class with attributes name, hand, score, and
+        total_wins.
+        """
         self.name = name
         self.hand = []
         self.score = 0
@@ -97,11 +101,18 @@ class Player:
 
 class Dealer(Player):
     def __init__(self, name="Dealer"):
+        """
+        Creates instance of Dealer class, inheriting from the Player class
+        which contains the attributes name, hand, score, and total_wins.
+        """
         super().__init__(name)
 
 
 class Deck:
     def __init__(self):
+        """
+        Creates instance of Deck class with a deck attribute.
+        """
         self.deck = self.build(SUITS, PIPS)
 
     def __str__(self):
@@ -134,6 +145,9 @@ class Deck:
 
 class Card:
     def __init__(self, suit, pip, value):
+        """
+        Creates instance of Card class with attributes suit, pip, and value.
+        """
         self.suit = suit
         self.pip = pip
         self.value = value
@@ -144,6 +158,10 @@ class Card:
 
 class GameRound:
     def __init__(self, player, dealer):
+        """
+        Creates instance of GameRound class with the attributes deck and
+        dealer_card_reveal. Also calls GameRound's play_a_round method.
+        """
         self.deck = Deck()
         self.dealer_card_reveal = False
 
@@ -309,6 +327,10 @@ class GameRound:
 
 class Game:
     def __init__(self):
+        """
+        Creates instance of Game class with attributes end_game, player, and
+        dealer.
+        """
         self.end_game = False
         self.player = Player()
         self.dealer = Dealer()
