@@ -213,6 +213,12 @@ class GameRound:
         return "Ceci n'est pas une Game. (Ou est-ce?)"
 
     def play_a_round(self, player, dealer):
+        """
+        Calls methods to prompt the dealing of cards, recalculating of ace
+        values, presenting the initial hands, the determining of winners
+        (including hit loops for both player and dealer), and printing of the
+        running tallies of player and dealer wins across multiple game rounds.
+        """
         print()
         print(" ============================================")
         print(" ============================================")
@@ -235,6 +241,14 @@ class GameRound:
         self.print_divider_split_sec_pause()
 
     def determine_winner(self, dealer, player):
+        """
+        Checks to see if dealer and/or player scores are at 21--win/lose/draw
+        declarations are made if so, otherwise the player is entered into their
+        hit loop. If the player's score hits 21 precisely at this time, they
+        win. Otherwise, the dealer_hit_loop method is called, after which
+        point, final win/loss/draw determinations are made. Tallies are added
+        accordingly to player and dealer total_wins attributes.
+        """
         if player.score == 21 and dealer.score == 21:
             self.final_score_display(player, dealer)
             print(" It's a draw!")
@@ -284,6 +298,12 @@ class GameRound:
                         dealer.total_wins += 1
 
     def hand_values(self, dealer, player):
+        """
+        Calculates the total current value of dealer and player hands by
+        placing all values for the player's hand into one list and all values
+        for the dealer's hand into another, and then running sum() on each of
+        the two lists and updating player.score and dealer.score accordingly.
+        """
         player_hand_values = []
         dealer_hand_values = []
         for card in player.hand:
@@ -294,8 +314,17 @@ class GameRound:
         dealer.score = sum(dealer_hand_values)
 
     def prompt_hit_or_stand(self, player, dealer):
+        """
+        Starts the loop as long as the dealer's score is less than 21. In the
+        loop, for as long as the player's score is less than 21 and the player
+        hasn't opted to stand, player is asked whether they'd like to hit. If
+        invalid input is entered, inform and reprompt them. If they opt to hit,
+        hit them, print current dealer and player hands and scores. Else if
+        they opt to stand, reaffirm this has been done. If the player busts
+        (goes over 21), reaffirm this.
+        """
         player_stand = False
-        if (player.score < 21) and (dealer.score < 21) and (player_stand is False):
+        if (dealer.score < 21):
             while (player.score < 21) and (player_stand is False):
                 print()
                 time.sleep(0.8)
@@ -318,6 +347,10 @@ class GameRound:
                 print(f" {player.name} has busted.")
 
     def dealer_hit_loop(self, player, dealer):
+        """
+        As long as the dealer's score is less than 17, hit the dealer,
+        recalculate ace values, and print the scores. Lather, rinse, repeat.
+        """
         while dealer.score < 17:
             self.print_divider_two_sec_pause()
             print(" Dealer's turn.")
@@ -327,6 +360,11 @@ class GameRound:
             self.dealer_card_reveal = True
 
     def present_scores_while_dealercard_hidden(self, player, dealer):
+        """
+        For presenting scores and hands during times when it's still desirable
+        to reveal only one of the dealer's cards and score. (Bonus: Additional
+        formatting thrown in.)
+        """
         print()
         time.sleep(0.8)
 
@@ -334,6 +372,11 @@ class GameRound:
         print(f" {player.name.upper()}'S SCORE: {player.score}")
 
     def present_scores(self, player, dealer):
+        """
+        For presenting scores and hands during times when you'd like to show
+        the dealer's whole hand and score. (Bonus: Additional formatting thrown
+        in.)
+        """
         print()
         time.sleep(0.8)
         dealer.show_hand()
@@ -346,23 +389,38 @@ class GameRound:
         time.sleep(0.8)
 
     def print_divider_two_sec_pause(self):
+        """
+        Formatting! For printing a divider when a two-second pause is desired.
+        """
         time.sleep(2)
         print()
         print(" - - - - - - - - - - - - - - - - - - - - - -")
         print()
 
     def print_divider_split_sec_pause(self):
+        """
+        Formatting! For printing a divider when a 0.8-second pause is desired.
+        """
         time.sleep(0.8)
         print()
         print(" - - - - - - - - - - - - - - - - - - - - - -")
         print()
 
     def check_dealer_card_reveal(self, player, dealer):
+        """
+        If the dealer's hand hasn't yet been revealed in full, this will print
+        " Revealing dealer card..." and print dealer and player scores and
+        hands in their entirety.
+        """
         if self.dealer_card_reveal is not True:
             print(" Revealing dealer card...")
             self.present_scores(player, dealer)
 
     def final_score_display(self, player, dealer):
+        """
+        Prints a divider with a two-second pause and runs the
+        check_dealer_card_reveal method.
+        """
         self.print_divider_two_sec_pause()
         self.check_dealer_card_reveal(player, dealer)
 
