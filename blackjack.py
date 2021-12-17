@@ -80,6 +80,10 @@ class Player:
         self.total_wins = 0
 
     def __str__(self):
+        """
+        Overrides default __str__ method of the Player class by returning its
+        name attribute.
+        """
         return self.name
 
     def recalculate_ace_values(self, game, dealer, player):
@@ -116,6 +120,10 @@ class Deck:
         self.deck = self.build(SUITS, PIPS)
 
     def __str__(self):
+        """
+        Overrides default __str__ method of the Deck class by returning its
+        deck attribute.
+        """
         return str(self.deck)
 
     def build(self, suits, pips):
@@ -153,6 +161,10 @@ class Card:
         self.value = value
 
     def __str__(self):
+        """
+        Overrides default __str__ method of the Card class by returning a
+        string that reveals the pip and suit of the card.
+        """
         return f"{self.pip} of {self.suit}"
 
 
@@ -168,6 +180,11 @@ class GameRound:
         self.play_a_round(player, dealer)
 
     def __str__(self):
+        """
+        Overrides default __str__ method of the GameRound class by returning a
+        string referencing the Treachery of Images. (Read: Ariel didn't know
+        what to put here.)
+        """
         return "Ceci n'est pas une Game. (Ou est-ce?)"
 
     def play_a_round(self, player, dealer):
@@ -336,7 +353,11 @@ class Game:
         self.dealer = Dealer()
 
     def __str__(self):
-        return f"THE PLAYER'S NAME IS {self.player.name}."
+        """
+        Overrides default __str__ method of the Game class by returning a
+        string indicating the current state of the end_game attribute.
+        """
+        return f"PLAYER HAS EXPRESSED DESIRE TO END THE GAME: {self.end_game}"
 
     def start(self):
         print()
